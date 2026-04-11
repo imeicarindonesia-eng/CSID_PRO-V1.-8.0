@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>⚡CSID_PRO - Final Testing V182</title>
+    <title>⚡CSID_PRO - Total Stability V189</title>
     
-    <!-- External Scripts -->
+    <!-- Scripts -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -42,14 +42,22 @@
         }
 
         @media (min-width: 450px) {
-            .android-wrapper { max-width: 420px; height: 850px; border: 12px solid #1e293b; border-radius: 52px; box-shadow: 0 0 120px rgba(0,0,0,1); }
+            .android-wrapper {
+                max-width: 420px; height: 850px; border: 12px solid #1e293b;
+                border-radius: 52px; box-shadow: 0 0 120px rgba(0,0,0,1);
+            }
         }
 
-        /* --- PAGES --- */
-        .page { position: absolute; inset: 0; display: none; flex-direction: column; background: #f1f5f9; z-index: 10; }
-        #pageLogin { display: flex; z-index: 50; }
+        /* --- PAGE SYSTEM --- */
+        .page { 
+            position: absolute; inset: 0; 
+            display: none; 
+            flex-direction: column; background: #f1f5f9; 
+            z-index: 10; 
+        }
+        #pageLogin { display: flex !important; z-index: 60; }
 
-        /* --- HEADER --- */
+        /* --- UI COMPONENTS --- */
         .premium-header {
             background: linear-gradient(180deg, var(--premium-blue) 0%, var(--light-blue) 100%);
             padding: 15px 20px; color: white; border-bottom: 2.5px solid var(--turbo-cyan); flex-shrink: 0;
@@ -68,16 +76,14 @@
         }
         .plate-box.active-pulse { border-color: var(--turbo-cyan); box-shadow: 0 0 15px var(--turbo-cyan); }
 
-        #plateInput { flex: 1; background: transparent; border: none; color: #000; font-size: 2rem; font-weight: 900; font-family: 'Roboto Mono', monospace; outline: none; letter-spacing: 1.5px; text-align: center; width: 100%; }
+        #plateInput { flex: 1; background: transparent; border: none; color: #000000; font-size: 2.2rem; font-weight: 900; font-family: 'Roboto Mono', monospace; outline: none; letter-spacing: 1.5px; text-align: center; width: 100%; }
         .btn-paste-hybrid { background: #f1f5f9; color: #1e293b; padding: 7px 10px; border-radius: 8px; font-size: 8.5px; font-weight: 900; text-transform: uppercase; border: 1.5px solid #e2e8f0; display: flex; align-items: center; gap: 4px; }
 
-        /* --- CONTENT AREA --- */
         .content-area { flex: 1; overflow-y: auto; background: #e2e8f0; display: flex; flex-direction: column; padding: 20px; justify-content: center; align-items: center; }
         .guardian-warning-minimal { text-align: center; padding: 20px; width: 100%; max-width: 320px; border-top: 1px solid rgba(0, 0, 0, 0.08); border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
         .guardian-text-minimal { color: rgba(0, 0, 0, 0.45); font-size: 13px; font-weight: 700; line-height: 1.5; }
         .guardian-accent-minimal { color: rgba(0, 0, 0, 0.65); font-weight: 900; display: block; margin-bottom: 8px; font-size: 16px; text-transform: uppercase; letter-spacing: 2.5px; }
 
-        /* --- NAV ABOVE KB --- */
         .top-kb-nav {
             background: linear-gradient(90deg, var(--premium-blue) 0%, var(--light-blue) 100%);
             height: 65px; display: flex; align-items: center; padding: 0 10px;
@@ -89,7 +95,6 @@
         .nav-btn.active { color: var(--turbo-cyan); transform: translateY(-2px); }
         .nav-btn span { font-size: 8.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* --- KEYBOARD --- */
         .kb-container { background: var(--bg-kb); padding: 8px 6px calc(8px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 5px; border-top: 1.5px solid #999; flex-shrink: 0; user-select: none; }
         .kb-row { display: flex; justify-content: center; gap: 4px; width: 100%; }
         .kb-key { background: #ffffff; border: 1.5px solid #000; border-radius: 7px; color: #000; font-size: 15px; font-weight: 900; height: 44px; flex: 1; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 0px #000; cursor: pointer; }
@@ -102,10 +107,10 @@
         .turbo-badge-glow { background: #000; color: var(--turbo-cyan); border: 2px solid var(--turbo-cyan); padding: 5px 10px; border-radius: 6px; font-size: 8px; font-weight: 900; text-transform: uppercase; box-shadow: 0 0 15px rgba(0, 229, 255, 0.7); white-space: nowrap; }
         .square-action-btn { background: #ffffff; border: 2.2px solid #000; width: 50px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 0px #000; cursor: pointer; color: #000; }
 
-        /* --- TURBO LOADER --- */
+        /* --- ✅ LOADER & MODAL OVERLAYS --- */
         #main-loader { 
             position: fixed; inset: 0; background: rgba(15, 23, 42, 0.98); 
-            z-index: 6000; display: none; flex-direction: column; 
+            z-index: 9000; display: none; flex-direction: column; 
             align-items: center; justify-content: center; color: white; 
             backdrop-filter: blur(10px);
         }
@@ -122,63 +127,56 @@
             box-shadow: 0 0 25px var(--turbo-cyan);
         }
 
-        .bolt-icon {
-            color: var(--turbo-cyan); filter: drop-shadow(0 0 20px var(--turbo-cyan));
-            animation: boltPulse 0.3s ease-in-out infinite alternate; z-index: 10;
-        }
-
+        .bolt-icon { color: var(--turbo-cyan); filter: drop-shadow(0 0 20px var(--turbo-cyan)); animation: boltPulse 0.3s ease-in-out infinite alternate; z-index: 10; }
         @keyframes ringSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes boltPulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.3); opacity: 1; } }
+        @keyframes boltPulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.15); opacity: 1; } }
 
-        .turbo-text {
-            font-size: 13px; font-weight: 900; text-transform: uppercase;
-            letter-spacing: 6px; color: #fff; text-shadow: 0 0 15px var(--turbo-cyan);
+        .turbo-text { font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 6px; color: #fff; text-shadow: 0 0 15px var(--turbo-cyan); }
+
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 8000; display: none; align-items: center; justify-content: center; padding: 25px; backdrop-filter: blur(10px); }
+        .modal { background: white; border-radius: 35px; padding: 30px 25px; width: 100%; max-width: 350px; text-align: center; }
+        
+        #modalLogout .modal { background: #000; border: 1px solid var(--turbo-cyan); color: white; }
+        
+        .btn-neon-exit {
+            background-color: var(--turbo-cyan) !important;
+            color: #000 !important;
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.8) !important;
+            transition: all 0.3s;
         }
+
+        .pop-in { animation: pop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         /* --- RESULT PAGE --- */
-        #pageResult { background: #f8fafc; z-index: 500; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #pageResult { background: #f8fafc; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .result-header { background: linear-gradient(180deg, var(--premium-blue) 0%, var(--light-blue) 100%); padding: 25px 20px; color: white; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--turbo-cyan); }
+        
         .luxury-data-card { background: white; border-radius: 20px; margin: 10px 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; overflow: hidden; }
-        .card-section-title { background: #f8fafc; padding: 12px 20px; font-size: 11px; font-weight: 900; color: #1e293b; text-transform: uppercase; border-bottom: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
+        .card-section-title { background: #f8fafc; padding: 12px 20px; font-size: 11px; font-weight: 900; color: #000000; text-transform: uppercase; border-bottom: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
         .data-item { padding: 12px 20px; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; }
         .data-item:last-child { border-bottom: none; }
         .data-label { font-size: 8.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 3px; }
-        .data-value { font-size: 14px; font-weight: 900; color: #1e293b; line-height: 1.4; }
-        .btn-wa-official { background: #25d366; color: white; margin: 20px 15px; padding: 18px; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 900; text-transform: uppercase; font-size: 12px; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3); }
+        .data-value { font-size: 15px; font-weight: 900; color: #000000; line-height: 1.4; }
+        .btn-wa-official { background: #22c55e; color: white; margin: 20px 15px; padding: 18px; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 900; text-transform: uppercase; font-size: 12px; box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3); }
 
-        /* --- MODALS --- */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 25px; backdrop-filter: blur(10px); }
-        .modal { background: white; border-radius: 35px; padding: 30px 25px; width: 100%; max-width: 350px; text-align: center; }
-        #modalLogout .modal { background: #000; border: 1px solid var(--turbo-cyan); color: white; }
-        
         .admin-luxury-card { background: #ffffff; border-radius: 18px; padding: 15px; margin-bottom: 10px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
-        .admin-select { width: 100%; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 15px; padding: 12px; font-size: 14px; font-weight: 800; color: #1e293b; outline: none; margin-bottom: 25px; }
+        .admin-select { width: 100%; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 15px; padding: 12px; font-size: 14px; font-weight: 800; color: #000000; outline: none; margin-bottom: 25px; }
 
         /* --- CAMERA --- */
-        #cameraOverlay { position: fixed; inset: 0; background: #000; z-index: 2000; display: none; flex-direction: column; }
+        #cameraOverlay { position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column; }
         #videoFeed { width: 100%; height: 100%; object-fit: cover; }
         .scan-focus-area { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; height: 180px; border: 3px solid var(--turbo-cyan); border-radius: 20px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.6); }
         .scan-moving-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--turbo-cyan); box-shadow: 0 0 20px var(--turbo-cyan); animation: scanAnimate 2.5s infinite linear; }
         @keyframes scanAnimate { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
         .cam-bottom-nav { position: absolute; bottom: 40px; left: 0; right: 0; display: flex; justify-content: space-around; align-items: center; padding: 0 30px; }
-        .cam-shutter { width: 75px; height: 75px; background: white; border-radius: 50%; border: 6px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
-        .cam-cancel { color: white; font-weight: 900; text-transform: uppercase; font-size: 12px; background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 100px; backdrop-filter: blur(5px); }
-
-        .success-checkmark { width: 85px; height: 85px; margin: 0 auto 20px; position: relative; }
-        .check-icon { width: 80px; height: 80px; position: relative; border-radius: 50%; border: 4px solid #22c55e; box-sizing: content-box; }
-        .icon-line { height: 6px; background-color: #22c55e; display: block; border-radius: 2px; position: absolute; z-index: 10; }
-        .line-tip { top: 46px; left: 14px; width: 25px; transform: rotate(45deg); }
-        .line-long { top: 38px; right: 8px; width: 47px; transform: rotate(-45deg); }
-        .icon-circle { top: -4px; left: -4px; z-index: 10; width: 80px; height: 80px; border-radius: 50%; border: 4px solid rgba(34, 197, 94, 0.5); position: absolute; }
-        .icon-fix { top: 10px; width: 6px; left: 28px; z-index: 1; height: 95px; background-color: #FFFFFF; position: absolute; transform: rotate(-45deg); }
-        .pop-in { animation: pop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes pop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .cam-shutter { width: 75px; height: 75px; background: white; border-radius: 50%; border: 6px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
-    <!-- ✅ TURBO VISION ENGINE -->
+    <!-- 1. ✅ LOADER & MODALS (TOP LEVEL FOR STABILITY) -->
     <div id="main-loader">
         <div class="turbo-logo-container">
             <div class="energy-ring"></div>
@@ -187,26 +185,53 @@
         <p id="spinnerText" class="turbo-text">TURBO SCANNING</p>
     </div>
 
-    <!-- CAMERA -->
+    <!-- NOTIF SYSTEM -->
+    <div id="modalAlert" class="overlay"><div class="modal pop-in text-center text-black"><div id="alertIconBox" class="mb-6 flex justify-center"></div><h3 id="alertTitle" class="font-black text-slate-900 text-2xl mb-2 uppercase">INFO SYSTEM</h3><p id="alertBody" class="text-slate-600 text-[14px] mb-8 leading-relaxed font-semibold px-4"></p><button class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase text-xs active:scale-95 shadow-xl" onclick="window.closeAlert()">OKE, LANJUTKAN</button></div></div>
+    
+    <!-- EXIT CONFIRM -->
+    <div id="modalLogout" class="overlay">
+        <div class="modal pop-in text-white">
+            <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6"><i data-lucide="power" class="text-turbo-cyan w-8 h-8"></i></div>
+            <h3 class="font-black text-white text-2xl mb-2 uppercase">KONFIRMASI</h3>
+            <p class="text-white/60 text-[14px] mb-4 leading-relaxed font-semibold px-4 text-white">Keluar dari CSID_PRO?</p>
+            <button class="btn-neon-exit w-full py-4 rounded-xl font-black mb-3 text-lg" onclick="window.confirmLogout()">YA, KELUAR</button>
+            <button class="bg-transparent border border-white/20 text-white w-full py-4 rounded-xl font-black" onclick="window.closeLogoutModal()">BATAL</button>
+        </div>
+    </div>
+
+    <!-- ✅ MODAL ADD PIN (NOW IN TOP LEVEL) -->
+    <div id="modalAddPin" class="overlay">
+        <div class="modal pop-in text-center text-black">
+            <h3 class="font-black text-slate-900 mb-6 uppercase text-sm text-black">AKTIVASI PIN AKSES</h3>
+            <label class="text-[9px] font-black text-slate-400 uppercase text-left w-full block mb-2 px-1">Nomor PIN (Angka)</label>
+            <input type="number" id="newPinInput" class="w-full text-center text-4xl font-black border-2 border-slate-100 rounded-xl py-4 mb-6 outline-none bg-slate-50 text-black" placeholder="0000">
+            <label class="text-[9px] font-black text-slate-400 uppercase text-left w-full block mb-2 px-1 text-black">Pilih Masa Aktif</label>
+            <select id="durationSelect" class="admin-select">
+                <option value="10">10 HARI</option><option value="20">20 HARI</option><option value="30" selected>30 HARI</option>
+                <option value="90">3 BULAN</option><option value="180">6 BULAN</option><option value="365">1 TAHUN</option>
+            </select>
+            <button class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase text-xs mb-5 shadow-xl active:scale-95" onclick="window.savePin()">KONFIRMASI</button>
+            <button class="w-full text-slate-400 font-bold uppercase text-[11px]" onclick="window.closeAddPin()">BATAL</button>
+        </div>
+    </div>
+
+    <!-- CAMERA OVERLAY -->
     <div id="cameraOverlay">
         <video id="videoFeed" autoplay playsinline muted></video>
         <div class="scan-focus-area"><div class="scan-moving-line"></div></div>
         <div class="cam-bottom-nav">
-            <button class="cam-cancel" onclick="window.stopCamera()">BATAL</button>
+            <button class="text-white font-black text-xs px-6 py-3 bg-white/10 rounded-full" onclick="window.stopCamera()">BATAL</button>
             <button class="cam-shutter" onclick="window.captureImage()"><i data-lucide="camera" size="36" class="text-slate-900"></i></button>
             <div class="w-12"></div>
         </div>
         <canvas id="captureCanvas" style="display:none;"></canvas>
     </div>
 
-    <!-- MODALS -->
-    <div id="modalAlert" class="overlay"><div class="modal pop-in text-center text-black"><div id="alertIconBox" class="mb-6 flex justify-center"></div><h3 id="alertTitle" class="font-black text-slate-900 text-2xl mb-2 uppercase">INFO SYSTEM</h3><p id="alertBody" class="text-slate-600 text-[14px] mb-8 leading-relaxed font-semibold px-4"></p><button class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase text-xs active:scale-95 shadow-xl" onclick="window.closeAlert()">OKE, LANJUTKAN</button></div></div>
-    <div id="modalLogout" class="overlay"><div class="modal pop-in text-white"><div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6"><i data-lucide="power" class="text-turbo-cyan w-8 h-8"></i></div><h3 class="font-black text-white text-2xl mb-2 uppercase">KONFIRMASI</h3><p class="text-white/60 text-[14px] mb-4 leading-relaxed font-semibold px-4 text-white">Keluar dari CSID_PRO?</p><button class="bg-turbo-cyan text-slate-900 w-full py-4 rounded-xl font-black mb-3" onclick="window.confirmLogout()">YA, KELUAR</button><button class="bg-transparent border border-white/20 text-white w-full py-4 rounded-xl font-black" onclick="window.closeLogoutModal()">BATAL</button></div></div>
-
+    <!-- MAIN APP STRUCTURE -->
     <div class="android-wrapper">
-        <!-- 🔑 PAGE LOGIN (SLIDE AWAL) -->
+        <!-- 🔑 PAGE LOGIN -->
         <div id="pageLogin" class="page flex flex-col justify-center px-10 text-center bg-slate-50">
-            <div class="mb-14 text-black"><div class="inline-flex bg-white p-7 rounded-[3rem] shadow-2xl mb-8 border border-slate-100"><i data-lucide="shield-check" class="text-slate-900 w-16 h-16" stroke-width="2.5"></i></div><h1 class="text-5xl font-black text-slate-900 tracking-tighter mb-2 text-black">⚡CSID_PRO</h1><p class="text-[11px] font-black text-slate-400 uppercase tracking-[5px]">ULTIMATE v182</p></div>
+            <div class="mb-14 text-black"><div class="inline-flex bg-white p-7 rounded-[3rem] shadow-2xl mb-8 border border-slate-100"><i data-lucide="shield-check" class="text-slate-900 w-16 h-16" stroke-width="2.5"></i></div><h1 class="text-5xl font-black text-slate-900 tracking-tighter mb-2 text-black">⚡CSID_PRO</h1><p class="text-[11px] font-black text-slate-400 uppercase tracking-[5px]">STABLE v189</p></div>
             <div class="bg-white p-10 rounded-[3.5rem] shadow-2xl border border-slate-100 text-black">
                 <p class="text-[10px] font-black text-slate-400 uppercase mb-8 tracking-widest text-center">INPUT PIN AKSES</p>
                 <input type="password" id="pinInput" class="w-full text-center text-4xl font-black tracking-[15px] outline-none border-b-4 border-slate-900 mb-12 text-slate-900 pb-2 bg-white" placeholder="••••">
@@ -219,10 +244,10 @@
         <div id="pageSearch" class="page flex flex-col">
             <div class="premium-header text-white">
                 <div class="user-status-bar"><div class="status-pill"><span class="status-label">USER:</span><span class="status-value text-white" id="userTag">...</span></div><div class="status-pill border-turbo-cyan/30 bg-turbo-cyan/5"><span class="status-label text-turbo-cyan/60">AKTIF:</span><span class="status-value text-turbo-cyan" id="expiryTag">...</span></div></div>
-                <div class="plate-box text-black" id="plateBox"><input type="text" id="plateInput" placeholder="NO PLAT..." readonly class="text-black"><button class="btn-paste-hybrid" onclick="window.kPaste()"><i data-lucide="clipboard-list" size="14"></i>TEMPEL</button></div>
+                <div class="plate-box text-black" id="plateBox"><input type="text" id="plateInput" placeholder="NO PLAT..." readonly class="text-black"><button class="btn-paste-hybrid" onclick="window.kPaste()">TEMPEL</button></div>
             </div>
             <div class="content-area">
-                <div class="guardian-warning-minimal"><span class="guardian-accent-minimal text-black/60">WARNING ⚠️</span><p class="guardian-text-minimal text-black/40">Note : Jika Aplikasi ini di salah gunakan akun anda akan terblokir secara otomatis oleh sistem!</p></div>
+                <div class="guardian-warning-minimal"><span class="guardian-accent-minimal text-black/60">WARNING ⚠️</span><p class="guardian-text-minimal text-black/40">Note : Jika Aplikasi ini di salah gunakan akun anda akan terblokir otomatis!</p></div>
             </div>
             <div class="top-kb-nav">
                 <div class="nav-btn active" id="nav-search-btn" onclick="window.switchP('pageSearch')"><i data-lucide="search" size="22"></i><span>Cari</span></div>
@@ -242,9 +267,9 @@
 
         <!-- ✅ PAGE RESULT -->
         <div id="pageResult" class="page flex flex-col">
-            <div class="result-header text-white"><button onclick="window.switchP('pageSearch')" class="bg-white/10 px-4 py-2 rounded-xl flex items-center gap-2 font-black text-[10px] text-white"><i data-lucide="arrow-left" size="14"></i> KEMBALI</button><span class="font-black text-xs uppercase tracking-widest text-white">Laporan Deteksi</span><div class="w-16"></div></div>
+            <div class="result-header text-white"><button onclick="window.switchP('pageSearch')" class="bg-white/10 px-4 py-2 rounded-xl flex items-center gap-2 font-black text-[10px] text-white"><i data-lucide="arrow-left" size="14"></i> KEMBALI</button><span class="font-black text-xs uppercase tracking-widest text-white flex-1 mr-12 text-center">Laporan Deteksi</span></div>
             <div id="resultContentArea" class="flex-1 overflow-y-auto pb-4 text-black"></div>
-            <div class="p-5 text-center text-black"><p class="text-[10px] font-black text-slate-900 mb-1 uppercase text-black">NOTE : ⚠️</p><p class="text-[10px] font-bold text-slate-500 leading-relaxed px-5 text-black">APLIKASI INI DI BUAT UNTUK MENGAKSES IDENTITAS RESMI KEPEMILIKAN KENDARAAN YANG SAH SESUAI TNKB RESMI PADA KENDARAAN.</p></div>
+            <div class="p-5 text-center text-black"><p class="text-[10px] font-black text-slate-900 mb-1 uppercase text-black">NOTE : ⚠️</p><p class="text-[10px] font-bold text-slate-500 leading-relaxed px-5 text-black">APLIKASI INI DI BUAT UNTUK MENGAKSES IDENTITAS RESMI KEPEMILIKAN KENDARAAN.</p></div>
             <button id="waShareBtn" class="btn-wa-official text-white"><i data-lucide="share-2" size="20"></i> BAGIKAN HASIL KE WHATSAPP</button>
         </div>
 
@@ -257,9 +282,6 @@
         </div>
     </div>
 
-    <!-- MODAL ADD PIN -->
-    <div id="modalAddPin" class="overlay" style="z-index: 4500;"><div class="modal pop-in text-center text-black"><h3 class="font-black text-slate-900 mb-6 uppercase text-sm text-black">AKTIVASI PIN AKSES</h3><label class="text-[9px] font-black text-slate-400 uppercase text-left w-full block mb-2 px-1">Nomor PIN (Angka)</label><input type="number" id="newPinInput" class="w-full text-center text-4xl font-black border-2 border-slate-100 rounded-xl py-4 mb-6 outline-none bg-slate-50 text-black" placeholder="0000"><label class="text-[9px] font-black text-slate-400 uppercase text-left w-full block mb-2 px-1">Pilih Masa Aktif</label><select id="durationSelect" class="admin-select"><option value="10">10 HARI</option><option value="20">20 HARI</option><option value="30" selected>30 HARI</option><option value="90">3 BULAN</option><option value="180">6 BULAN</option><option value="365">1 TAHUN</option></select><button class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase text-xs mb-5 shadow-xl active:scale-95" onclick="window.savePin()">KONFIRMASI</button><button class="w-full text-slate-400 font-bold uppercase text-[11px]" onclick="window.closeAddPin()">BATAL</button></div></div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -268,32 +290,31 @@
         const apiKey = ""; 
         let isAuthReady = false; let cameraStream = null; let touchTimer = null;
 
-        // Force Landing at Login
+        // ✅ RE-FIXED STARTUP LOCKDOWN: Always start at Login with Zero Interference
         window.addEventListener('load', () => { 
             window.switchP('pageLogin'); 
             lucide.createIcons(); 
             initLongPress(); 
         });
 
-        // ✅ LONG PRESS LOGIC
         const initLongPress = () => {
             const el = document.getElementById('plateInput'); if(!el) return;
             const pb = document.getElementById('plateBox');
             const start = () => {
                 pb.classList.add('active-pulse');
-                touchTimer = setTimeout(() => { 
-                    window.kPaste(); 
-                    if(navigator.vibrate) navigator.vibrate([100, 50, 100]); 
-                    pb.classList.remove('active-pulse');
-                }, 600);
+                touchTimer = setTimeout(() => { window.kPaste(); if(navigator.vibrate) navigator.vibrate([100, 50, 100]); pb.classList.remove('active-pulse'); }, 600);
             };
             const end = () => { clearTimeout(touchTimer); pb.classList.remove('active-pulse'); };
             el.addEventListener('touchstart', start); el.addEventListener('touchend', end);
             el.addEventListener('mousedown', start); el.addEventListener('mouseup', end);
         };
 
+        // --- CORE UI FUNCTIONS ---
         window.closeAlert = () => { document.getElementById('modalAlert').style.display = 'none'; };
-        window.showAddPinModal = () => { document.getElementById('modalAddPin').style.display = 'flex'; };
+        window.showAddPinModal = () => { 
+            const el = document.getElementById('modalAddPin');
+            if(el) el.style.display = 'flex'; 
+        };
         window.closeAddPin = () => { document.getElementById('modalAddPin').style.display = 'none'; };
         window.kAdd = (v) => { document.getElementById('plateInput').value += v; };
         window.kDel = () => { const i = document.getElementById('plateInput'); i.value = i.value.slice(0, -1); };
@@ -306,10 +327,10 @@
         };
 
         window.kPaste = async () => {
-            try {
-                const text = await navigator.clipboard.readText();
-                if (text) document.getElementById('plateInput').value = text.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
-                else window.showM("INFO", "Clipboard kosong bos.");
+            try { 
+                const text = await navigator.clipboard.readText(); 
+                if (text) document.getElementById('plateInput').value = text.trim().toUpperCase().replace(/[^A-Z0-9]/g, ''); 
+                else window.showM("INFO", "Clipboard kosong bos."); 
             } catch (err) { window.showM("IZIN DITOLAK", "Klik ALLOW pada browser bos."); }
         };
 
@@ -320,6 +341,7 @@
             setTimeout(() => { document.getElementById('pinInput').value = ""; document.getElementById('plateInput').value = ""; document.getElementById('nav-admin-btn').classList.add('hidden'); window.switchP('pageLogin'); window.hideL(); }, 800);
         };
 
+        // --- CAMERA ENGINE ---
         window.startCamera = async () => {
             const overlay = document.getElementById('cameraOverlay'); const video = document.getElementById('videoFeed');
             try { cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 } } }); video.srcObject = cameraStream; overlay.style.display = 'flex'; await video.play(); } catch (err) { window.showM("KAMERA ERROR", "Mohon izinkan kamera."); }
@@ -332,15 +354,15 @@
             window.stopCamera(); window.analyzePlat(base64);
         };
         window.analyzePlat = async (base64) => {
-            window.showL("TURBO ANALYZING...");
+            window.showL("AI VISION SCANNING...");
             try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: "Extract Indonesian plate. Text only." }, { inlineData: { mimeType: "image/png", data: base64 } }] }] }) });
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: "Extract plate number. Text only." }, { inlineData: { mimeType: "image/png", data: base64 } }] }] }) });
                 const data = await res.json(); const plate = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim().toUpperCase().replace(/\s/g, '');
                 if (plate && plate !== "NULL") { document.getElementById('plateInput').value = plate; window.doSearch(); } 
             } catch (e) {} window.hideL();
         };
 
-        // FIREBASE
+        // FIREBASE SYNC
         const fbConfig = JSON.parse(__firebase_config); const app = initializeApp(fbConfig); const auth = getAuth(app); const db = getFirestore(app);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'csid-pro-final-id'; 
 
@@ -380,7 +402,7 @@
             try { const expiryDate = new Date(); expiryDate.setDate(expiryDate.getDate() + d); await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'agents', p), { username: p, role: 'agent', expiry: expiryDate.toISOString(), deviceId: null, createdAt: new Date().toISOString() }, { merge: true }); document.getElementById('newPinInput').value = ""; window.hideL(); window.closeAddPin(); setTimeout(() => window.showM("BERHASIL!", `PIN ${p} AKTIF!`, "check-circle"), 400); } catch (e) { window.hideL(); window.showM("DITOLAK", e.message); }
         };
 
-        const loadAdminPanel = () => { onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'agents'), (snap) => { const list = document.getElementById('pinList'); if (!list) return; list.innerHTML = ""; snap.forEach(s => { const d = s.data(); const days = Math.ceil((new Date(d.expiry) - new Date()) / (1000 * 60 * 60 * 24)); list.innerHTML += `<div class="admin-luxury-card text-black"><div class="flex items-center gap-4"><div><p class="font-black text-slate-900 text-lg">PIN: ${d.username}</p><p class="text-[9px] font-bold text-slate-400 uppercase text-black">SISA: ${days} HARI</p><span class="text-[8px] font-black px-2 py-0.5 rounded-full ${d.deviceId ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}">${d.deviceId ? 'LOCKED' : 'OPEN'}</span></div></div><div class="flex gap-2"><button onclick="window.resetDevice('${s.id}')" class="bg-blue-50 p-3 rounded-xl text-blue-600 active:bg-blue-100 shadow-sm"><i data-lucide="refresh-cw" size="18"></i></button><button onclick="window.delPin('${s.id}')" class="bg-red-50 p-3 rounded-xl text-red-500 active:bg-red-100 shadow-sm"><i data-lucide="trash-2" size="18"></i></button></div></div>`; }); lucide.createIcons(); }); };
+        const loadAdminPanel = () => { onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'agents'), (snap) => { const list = document.getElementById('pinList'); if (!list) return; list.innerHTML = ""; snap.forEach(s => { const d = s.data(); const days = Math.ceil((new Date(d.expiry) - new Date()) / (1000 * 60 * 60 * 24)); list.innerHTML += `<div class="admin-luxury-card text-black"><div class="flex items-center gap-4 text-black"><div><p class="font-black text-slate-900 text-lg text-black">PIN: ${d.username}</p><p class="text-[9px] font-bold text-slate-400">SISA: ${days} HARI</p><span class="text-[8px] font-black px-2 py-0.5 rounded-full ${d.deviceId ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}">${d.deviceId ? 'LOCKED' : 'OPEN'}</span></div></div><div class="flex gap-2"><button onclick="window.resetDevice('${s.id}')" class="bg-blue-50 p-3 rounded-xl text-blue-600 shadow-sm"><i data-lucide="refresh-cw" size="18"></i></button><button onclick="window.delPin('${s.id}')" class="bg-red-50 p-3 rounded-xl text-red-500 shadow-sm"><i data-lucide="trash-2" size="18"></i></button></div></div>`; }); lucide.createIcons(); }); };
 
         window.resetDevice = async (id) => { try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'agents', id), { deviceId: null }); window.showM("RESET BERHASIL", "Siap di HP baru.", "refresh-cw"); } catch (e) {} };
         window.delPin = async (id) => { if(confirm("Hapus?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'agents', id)); };
@@ -397,9 +419,9 @@
             const content = document.getElementById('resultContentArea');
             content.innerHTML = `
                 <div class="p-4 text-[11px] font-black text-slate-400 italic text-center tracking-[2px]">LAPORAN RESMI CSID_PRO</div>
-                <div class="luxury-data-card text-black"><div class="card-section-title">IDENTITAS PEMILIK : 🖋</div><div class="data-grid"><div class="data-item"><p class="data-label">No. Polisi</p><p class="data-value text-turbo-cyan text-black">${nopol}</p></div><div class="data-item text-black"><p class="data-label text-black">Pemilik</p><p class="data-value text-black">${d.owner_name || 'Baharuddin'}</p></div><div class="data-item text-black"><p class="data-label text-black">Alamat</p><p class="data-value text-sm text-black">${d.owner_address || 'Desa Lantik, Teupah Barat, Simeulue'}</p></div><div class="data-item text-black"><p class="data-label text-black">Nik</p><p class="data-value text-xs font-mono text-black">${d.owner_id || '109030805580001'}</p></div><div class="data-item text-black"><p class="data-label text-black">Pekerjaan</p><p class="data-value text-black">${d.owner_job || 'Pensiunan PNS'}</p></div></div></div>
-                <div class="luxury-data-card text-black"><div class="card-section-title text-black">DATA KENDARAAN : 🖋</div><div class="data-grid text-black"><div class="data-item text-black"><p class="data-label text-black">Merek</p><p class="data-value text-black">${d.vehicle_brand || 'Mitsubishi'}</p></div><div class="data-item text-black"><p class="data-label text-black">Tipe</p><p class="data-value text-black text-black">${d.vehicle_type || 'L300 PU FB-R (4x2) M/T'}</p></div><div class="data-item text-black"><p class="data-label text-black">Tahun</p><p class="data-value text-black text-black">${d.vehicle_year || '2019'}</p></div><div class="data-item text-black"><p class="data-label text-black">Warna</p><p class="data-value text-black text-black">${d.vehicle_color || 'Hitam'}</p></div><div class="data-item text-black"><p class="data-label text-black">Silinder</p><p class="data-value text-black text-black">${d.engine_capacity || '2477 cc'}</p></div><div class="data-item text-black"><p class="data-label text-black">Roda</p><p class="data-value text-black text-black">${d.wheels || '4'}</p></div><div class="data-item text-black"><p class="data-label text-black">No. Rangka</p><p class="data-value text-xs font-mono text-black text-black text-black">${d.chassis_number || 'MK2L0PU39JJ000669'}</p></div><div class="data-item text-black"><p class="data-label text-black">No. Mesin</p><p class="data-value text-xs font-mono text-black text-black text-black">${d.engine_number || '4D56CSY9849'}</p></div></div></div>
-                <div class="luxury-data-card text-black text-black text-black"><div class="card-section-title text-black text-black text-black">DOKUMEN RESMI : 🖋</div><div class="data-grid text-black text-black text-black"><div class="data-item text-black text-black text-black"><p class="data-label text-black text-black text-black">No. Bpkb</p><p class="data-value text-black text-black text-black text-black">-</p></div><div class="data-item text-black text-black text-black text-black text-black text-black"><p class="data-label text-black text-black text-black">No. Stnk</p><p class="data-value text-black text-black text-black text-black text-black">-</p></div><div class="data-item text-black text-black text-black text-black text-black text-black text-black"><p class="data-label text-black text-black text-black">Tanggal Daftar</p><p class="data-value text-black text-black text-black text-black text-black text-black text-black text-black">${d.registration_date || '-'}</p></div></div></div>`;
+                <div class="luxury-data-card text-black"><div class="card-section-title text-black">IDENTITAS PEMILIK : 🖋</div><div class="data-grid text-black"><div class="data-item text-black"><p class="data-label text-slate-400">No. Polisi</p><p class="data-value text-turbo-cyan">${nopol}</p></div><div class="data-item text-black text-black"><p class="data-label text-slate-400 text-black">Pemilik</p><p class="data-value text-black">${d.owner_name || '-'}</p></div><div class="data-item text-black text-black text-black"><p class="data-label text-slate-400 text-black">Alamat</p><p class="data-value text-sm text-black">${d.owner_address || '-'}</p></div><div class="data-item text-black text-black text-black text-black"><p class="data-label text-slate-400 text-black">Nik</p><p class="data-value text-xs font-mono text-black">${d.owner_id || '-'}</p></div><div class="data-item text-black text-black text-black text-black text-black"><p class="data-label text-slate-400 text-black text-black">Pekerjaan</p><p class="data-value text-black text-black">${d.owner_job || '-'}</p></div></div></div>
+                <div class="luxury-data-card text-black text-black text-black text-black text-black text-black text-black"><div class="card-section-title text-black">DATA KENDARAAN : 🖋</div><div class="data-grid text-black text-black text-black text-black"><div class="data-item text-black text-black"><p class="data-label text-slate-400">Merek</p><p class="data-value text-black">${d.vehicle_brand || '-'}</p></div><div class="data-item text-black text-black text-black"><p class="data-label text-slate-400">Tipe</p><p class="data-value text-black">${d.vehicle_type || '-'}</p></div><div class="data-item text-black text-black text-black text-black"><p class="data-label text-slate-400">Tahun</p><p class="data-value text-black">${d.vehicle_year || '-'}</p></div><div class="data-item text-black text-black text-black text-black text-black"><p class="data-label text-slate-400">Warna</p><p class="data-value text-black">${d.vehicle_color || '-'}</p></div><div class="data-item text-black text-black text-black text-black text-black text-black"><p class="data-label text-slate-400">Silinder</p><p class="data-value text-black">${d.engine_capacity || '-'}</p></div><div class="data-item text-black text-black text-black text-black text-black text-black text-black"><p class="data-label text-slate-400">Roda</p><p class="data-value text-black">${d.wheels || '-'}</p></div><div class="data-item text-black text-black text-black text-black text-black text-black text-black text-black text-black"><p class="data-label text-slate-400 text-black text-black">No. Rangka</p><p class="data-value text-xs font-mono text-black">${d.chassis_number || '-'}</p></div><div class="data-item text-black text-black text-black text-black text-black text-black text-black text-black text-black text-black"><p class="data-label text-slate-400 text-black text-black">No. Mesin</p><p class="data-value text-xs font-mono text-black">${d.engine_number || '-'}</p></div></div></div>
+                <div class="luxury-data-card text-black text-black text-black text-black text-black text-black text-black text-black text-black text-black text-black text-black text-black"><div class="card-section-title text-black text-black text-black text-black text-black text-black">DOKUMEN RESMI : 🖋</div><div class="data-grid text-black text-black text-black text-black text-black text-black"><div class="data-item text-black text-black text-black text-black text-black text-black text-black text-black text-black"><p class="data-label text-slate-400 text-black">No. Bpkb</p><p class="data-value text-black">-</p></div><div class="data-item text-black text-black text-black text-black text-black text-black text-black text-black text-black text-black"><p class="data-label text-slate-400 text-black">No. Stnk</p><p class="data-value text-black">-</p></div><div class="data-item text-black text-black text-black text-black text-black text-black text-black text-black text-black text-black text-black text-black text-black"><p class="data-label text-slate-400 text-black text-black">Tanggal Daftar</p><p class="data-value text-black text-black">${d.registration_date || '-'}</p></div></div></div>`;
             document.getElementById('waShareBtn').onclick = () => window.shareToWA(d); window.switchP('pageResult');
         };
 
@@ -410,15 +432,19 @@
         };
 
         window.switchP = (id) => {
-            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-            const pg = document.getElementById(id); if(pg) pg.style.display = 'flex';
+            document.querySelectorAll('.page').forEach(p => { p.style.display = 'none'; p.style.zIndex = '10'; });
+            const pg = document.getElementById(id); 
+            if(pg) { pg.style.display = 'flex'; pg.style.zIndex = '50'; }
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             if(id === 'pageSearch') document.getElementById('nav-search-btn').classList.add('active');
             if(id === 'pageAdmin') document.getElementById('nav-admin-btn').classList.add('active');
             lucide.createIcons();
         };
 
-        window.showL = (m) => { document.getElementById('spinnerText').innerText = m; document.getElementById('main-loader').style.display = 'flex'; };
+        window.showL = (m) => { 
+            const s = document.getElementById('spinnerText'); if(s) s.innerText = m;
+            document.getElementById('main-loader').style.display = 'flex'; 
+        };
         window.hideL = () => { document.getElementById('main-loader').style.display = 'none'; };
         window.showM = (t, b, icon) => { 
             document.getElementById('alertTitle').innerText = t; document.getElementById('alertBody').innerText = b; 
