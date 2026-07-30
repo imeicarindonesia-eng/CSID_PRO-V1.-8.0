@@ -41,6 +41,9 @@
         .camera-video { width: 100%; height: 100%; object-fit: cover; }
         .scan-guide { border: 3px solid rgba(249, 115, 22, 0.7); box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.65); }
         @media print { body { display: none !important; } }
+        /* Turbo Spin Loader Optimization */
+        .turbo-spin { animation: spin 0.45s linear infinite !important; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -53,54 +56,30 @@
         const ADMIN_WA = "628136900872";
         const APP_ID = 'csid-intelligence-pro';
         
-        // API Utama SAMSAT IP Murni Bosku
+        // API UTAMA SAMSAT NASIONAL
         const API_UTAMA_URL = "https://suryamedha.com/tnkb/cek_tnkb.php?kunci=4e61cbab61d60ff80312a3e37dfe6c27&cari=";
 
-        // DATABASE INTERNAL CADANGAN (0ms Response jika terjadi offline total di lapangan)
         const OFFLINE_SAMSAT_DATABASE = {
-            "B29MAY": {
-                "wilayah": "B", "nopol": "29", "seri": "MAY",
-                "alamat": "BATU AMPAR RT. 002 RW. 001 KEL. BATU AMPAR KEC. KRAMAT JATI JAKARTA TIMUR",
-                "NoKTP": "-", "NoKK": "", "NoHP": "-", "Email": "",
-                "Pekerjaan": "-", "NamaPemilik": "MAYJATI", "NoRangka": "MHYHYC11S8J100930",
-                "NoMesin": "M15AIA101027", "RT": "0", "RW": "0", "KodeProvinsi": "6", "KodeKel": "1001",
-                "Merk": "SUZUKI", "Type": "BALENO SX RW415N A/T", "TahunPembuatan": "2008",
-                "IsiCylinder": "1490.000", "Warna": "ABU ABU METALIK", "JumlahSumbu": "2", "JumlahRoda": "4",
-                "NoBPKB": "F7065727G", "NoSTNK": "", "TanggalDaftar": "2012-02-06 13:31:20", "NoFaktur": "0",
-                "TanglFaktur": "0", "APM": ""
-            },
-            "B2873UZL": {
-                "wilayah": "B", "nopol": "2873", "seri": "UZL",
-                "alamat": "KMP BAHARI GG III/NO.45 RT.003 RW.010 KEL. TANJUNG PRIOK KEC. TANJUNG PRIOK JAKARTA UTARA",
-                "NoKTP": "3172020311670010", "NoKK": "", "NoHP": "081213464967", "Email": "",
-                "Pekerjaan": "KARYAWAN SWASTA", "NamaPemilik": "SUYANTO", "NoRangka": "MHKS6GJ6JMJ102739",
-                "NoMesin": "3NRH632172", "RT": "0", "RW": "0", "KodeProvinsi": "6", "KodeKel": "1001",
-                "Merk": "DAIHATSU", "Type": "SIGRA 1.2 R MT (B401RS-GMZFJ)", "TahunPembuatan": "2021",
-                "IsiCylinder": "1197.000", "Warna": "PUTIH", "JumlahSumbu": "2", "JumlahRoda": "4",
-                "NoBPKB": "R02668967", "NoSTNK": "", "TanggalDaftar": "2021-12-22 09:21:05", "NoFaktur": "0",
-                "TanglFaktur": "0", "APM": "PT. ASTRA DAIHATSU MOTOR"
-            },
-            "BL1562C": {
-                "wilayah": "BL", "nopol": "1562", "seri": "C",
-                "alamat": "DSN. SEURAHIM KEL. MEUNASAH SUKON KEC. LEMBAH SABIL KAB. ACEH BARAT DAYA",
-                "NoKTP": "1112030901710001", "NoKK": "", "NoHP": "08116863510", "Email": "",
-                "Pekerjaan": "PNS", "NamaPemilik": "JUARSA", "NoRangka": "MHKS6DJ1JKJ013179",
-                "NoMesin": "1KRA511396", "RT": "0", "RW": "0", "KodeProvinsi": "11", "KodeKel": "1002",
-                "Merk": "DAIHATSU", "Type": "B400RS-GMLEJ 1.0 D M/T", "TahunPembuatan": "2019",
-                "IsiCylinder": "998.000", "Warna": "PUTIH", "JumlahSumbu": "2", "JumlahRoda": "4",
-                "NoBPKB": "P00445479", "NoSTNK": "10317795G", "TanggalDaftar": "2025-07-22 09:06:45", "NoFaktur": "0",
-                "TanglFaktur": "0", "APM": "-"
-            },
-            "BK1108DT": {
-                "wilayah": "BK", "nopol": "1108", "seri": "DT",
-                "alamat": "JL. KAPT JUMHANA GG IV NO.12 KEL. SUKARAMAI II KEC. MEDAN AREA - MEDAN",
-                "NoKTP": "1271106908890002", "NoKK": "", "NoHP": "0000000000000000", "Email": "0",
-                "Pekerjaan": "WIRASWASTA", "NamaPemilik": "LIDIA NATALIA", "NoRangka": "MHK56GJ6JHJ019566",
-                "NoMesin": "3NRH113088", "RT": "0", "RW": "0", "KodeProvinsi": "33", "KodeKel": "0",
-                "Merk": "DAIHATSU", "Type": "B401RS-GMZFJ 1.2 R M\\/T", "TahunPembuatan": "2017",
-                "IsiCylinder": "1197.000", "Warna": "SILVER METALIK", "JumlahSumbu": "2", "JumlahRoda": "4",
-                "NoBPKB": "M10187883", "NoSTNK": "10792668I", "TanggalDaftar": "2025-10-15 15:12:33", "NoFaktur": "0",
-                "TanglFaktur": "0", "APM": "PT. ASTRA DAIHATSU MOTOR"
+            "B1011NOC": {
+                "nopol": "B1011NOC",
+                "nama": "GREGORIUS DENNIS SURJONO",
+                "ktp": "3674020411880001",
+                "hp": "-",
+                "email": "-",
+                "pekerjaan": "PELAJAR / MAHASISWA",
+                "alamat": "JL. SUTERA KIRANA I NO. 9 RT. 001 RW. 007 KEL. PONDOK JAGUNG TIMUR KEC. SERPONG UTARA TANGERANG SELATAN",
+                "merk": "TOYOTA",
+                "type": "AGYA 1.0 G MT",
+                "tahun": "2014",
+                "warna": "SILVER METALIK",
+                "cylinder": "998",
+                "jumlah_roda": "0",
+                "bbm": "-",
+                "no_rangka": "MHKA4DA3JEJ019981",
+                "no_mesin": "1KRA064398",
+                "no_bpkb": "K10727214",
+                "no_stnk": "-",
+                "tanggal_daftar": "2019-07-15 15:24:05"
             },
             "BL6521SM": {
                 "wilayah": "BL", "nopol": "6521", "seri": "SM",
@@ -113,16 +92,16 @@
                 "NoBPKB": "9372563-A", "NoSTNK": "-", "TanggalDaftar": "2019-02-13 00:00:00", "NoFaktur": "0",
                 "TanglFaktur": "0", "APM": "-"
             },
-            "DA8084GD": {
-                "wilayah": "DA", "nopol": "8084", "seri": "GD",
-                "alamat": "JL. A. YANI KM. 5.5 KEL. PEMURUS LUAR KEC. BANJARMASIN TIMUR - BANJARMASIN",
-                "NoKTP": "6371032408850003", "NoKK": "", "NoHP": "081345678901", "Email": "0",
-                "Pekerjaan": "SWASTA", "NamaPemilik": "M. SYAHRIZAL", "NoRangka": "MHK34FD8JHJ021455",
-                "NoMesin": "2NRH109854", "RT": "0", "RW": "0", "KodeProvinsi": "63", "KodeKel": "0",
-                "Merk": "TOYOTA", "Type": "AVANZA 1.3 G M/T", "TahunPembuatan": "2018",
-                "IsiCylinder": "1329.000", "Warna": "HITAM METALIK", "JumlahSumbu": "2", "JumlahRoda": "4",
-                "NoBPKB": "N09845772", "NoSTNK": "10834571A", "TanggalDaftar": "2024-05-12 11:24:08", "NoFaktur": "0",
-                "TanglFaktur": "0", "APM": "PT. TOYOTA ASTRA MOTOR"
+            "B29MAY": {
+                "wilayah": "B", "nopol": "29", "seri": "MAY",
+                "alamat": "BATU AMPAR RT. 002 RW. 001 KEL. BATU AMPAR KEC. KRAMAT JATI JAKARTA TIMUR",
+                "NoKTP": "-", "NoKK": "", "NoHP": "-", "Email": "",
+                "Pekerjaan": "-", "NamaPemilik": "MAYJATI", "NoRangka": "MHYHYC11S8J100930",
+                "NoMesin": "M15AIA101027", "RT": "0", "RW": "0", "KodeProvinsi": "6", "KodeKel": "1001",
+                "Merk": "SUZUKI", "Type": "BALENO SX RW415N A/T", "TahunPembuatan": "2008",
+                "IsiCylinder": "1490.000", "Warna": "ABU ABU METALIK", "JumlahSumbu": "2", "JumlahRoda": "4",
+                "NoBPKB": "F7065727G", "NoSTNK": "", "TanggalDaftar": "2012-02-06 13:31:20", "NoFaktur": "0",
+                "TanglFaktur": "0", "APM": ""
             }
         };
 
@@ -186,7 +165,7 @@
             const [newPinInput, setNewPinInput] = useState('');
             const [newPinDuration, setNewPinDuration] = useState(86400000); 
             const [confirmModal, setConfirmModal] = useState(null); 
-            
+
             const [cameraActive, setCameraActive] = useState(false);
             const [isScanning, setIsScanning] = useState(false);
             const videoRef = useRef(null);
@@ -214,7 +193,6 @@
 
             const showMsg = (txt) => { setNotification(txt); setTimeout(() => setNotification(null), 3000); };
 
-            // Initialize anonymous Firebase Session
             useEffect(() => {
                 let savedId = '';
                 try {
@@ -385,77 +363,81 @@
                 return null;
             };
 
-            // Deep recursive unpacking to target nested vehicle objects
-            const findVehicleDataDeep = (obj) => {
-                if (!obj) return null;
+            const unifyAndExtractVehicleData = (rawText) => {
+                if (!rawText) return null;
                 
-                if (typeof obj === 'string') {
-                    const cleaned = obj.trim();
-                    if (cleaned.startsWith('{') || cleaned.startsWith('[')) {
+                let parsed = null;
+                if (typeof rawText === 'object') {
+                    parsed = rawText;
+                } else {
+                    try {
+                        parsed = JSON.parse(rawText);
+                    } catch (e) {
+                        parsed = extractJson(rawText); 
+                    }
+                }
+                
+                if (!parsed) return null;
+                
+                if (parsed.contents) {
+                    let inner = null;
+                    if (typeof parsed.contents === 'string') {
                         try {
-                            const parsed = JSON.parse(cleaned);
-                            return findVehicleDataDeep(parsed);
-                        } catch (e) {}
+                            inner = JSON.parse(parsed.contents);
+                        } catch (e) {
+                            inner = extractJson(parsed.contents);
+                        }
+                    } else {
+                        inner = parsed.contents;
                     }
-                    return null;
+                    if (inner) parsed = inner;
                 }
                 
-                if (typeof obj !== 'object') return null;
-                
-                const vehicleKeys = [
-                    'NamaPemilik', 'nama_pemilik', 'nama', 'NoRangka', 'no_rangka', 
-                    'NoMesin', 'no_mesin', 'NoSTNK', 'no_stnk', 'NoBPKB', 'no_bpkb',
-                    'nopol', 'Nopol', 'wilayah', 'seri', 'ktp', 'hp', 'cylinder'
-                ];
-                
-                let matchCount = 0;
-                for (let key of vehicleKeys) {
-                    if (obj[key] !== undefined && obj[key] !== null && obj[key] !== '') {
-                        matchCount++;
+                const findVehicleObject = (obj) => {
+                    if (!obj) return null;
+                    if (typeof obj !== 'object') return null;
+                    
+                    if (Array.isArray(obj)) {
+                        for (let item of obj) {
+                            const found = findVehicleObject(item);
+                            if (found) return found;
+                        }
+                        return null;
                     }
-                }
-                
-                if (matchCount >= 2) {
-                    return obj;
-                }
-                
-                if (Array.isArray(obj)) {
-                    for (let item of obj) {
-                        const found = findVehicleDataDeep(item);
+                    
+                    if (obj.data && typeof obj.data === 'object') {
+                        const found = findVehicleObject(obj.data);
                         if (found) return found;
                     }
-                } else {
+
+                    const vehicleKeys = [
+                        'nopol', 'nama', 'NamaPemilik', 'NoRangka', 'no_rangka', 
+                        'NoMesin', 'no_mesin', 'NoSTNK', 'no_stnk', 'NoBPKB', 'no_bpkb',
+                        'wilayah', 'seri', 'ktp', 'NoKTP', 'type', 'merk'
+                    ];
+                    
+                    let matchCount = 0;
+                    for (let key of vehicleKeys) {
+                        if (obj[key] !== undefined && obj[key] !== null && String(obj[key]).trim() !== '') {
+                            matchCount++;
+                        }
+                    }
+                    
+                    if (matchCount >= 2) {
+                        return obj;
+                    }
+                    
                     for (let k in obj) {
-                        if (obj.hasOwnProperty(k)) {
-                            const found = findVehicleDataDeep(obj[k]);
+                        if (obj.hasOwnProperty(k) && obj[k] && typeof obj[k] === 'object') {
+                            const found = findVehicleObject(obj[k]);
                             if (found) return found;
                         }
                     }
-                }
-                return null;
-            };
-
-            const processResponseText = (text) => {
-                if (!text) return null;
-                let parsed = extractJson(text);
-                if (!parsed) return null;
-
-                if (parsed.contents) {
-                    if (typeof parsed.contents === 'string') {
-                        const temp = extractJson(parsed.contents);
-                        if (temp) parsed = temp;
-                    } else {
-                        parsed = parsed.contents;
-                    }
-                }
-
-                if (!parsed) return null;
-
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    return parsed[0];
-                }
-
-                return findVehicleDataDeep(parsed);
+                    
+                    return null;
+                };
+                
+                return findVehicleObject(parsed);
             };
 
             const fetchData = async () => {
@@ -463,70 +445,43 @@
                 if (!rawPlate) { showMsg("MASUKKAN PLAT NOMOR"); return; }
                 setLoading(true);
 
-                // Normalizing queries to lower-case combined format (e.g., "bl1562c")
                 const cleanQuery = rawPlate.replace(/\s+/g, '').toLowerCase();
 
-                // PATH 1: LOCAL HIGH-SPEED CACHE CHECK (Offline DB)
                 const offlineMatch = rawPlate.replace(/\s+/g, '').toUpperCase();
                 if (OFFLINE_SAMSAT_DATABASE[offlineMatch]) {
-                    setTimeout(() => {
-                        setSearchResult(OFFLINE_SAMSAT_DATABASE[offlineMatch]);
-                        setCurrentPage('result');
-                        setLoading(false);
-                    }, 120); 
+                    setSearchResult(OFFLINE_SAMSAT_DATABASE[offlineMatch]);
+                    setCurrentPage('result');
+                    setLoading(false);
                     return;
                 }
 
-                // PATH 2: Session Cache Loader
                 try {
                     const cached = sessionStorage.getItem(cleanQuery);
                     if (cached) {
                         setSearchResult(JSON.parse(cached));
                         setCurrentPage('result');
                         setLoading(false);
-                        showMsg("Data dimuat dari memori (Instan)");
                         return;
                     }
                 } catch (e) {
-                    console.warn("Session storage issue:", e);
+                    console.warn("sessionStorage error:", e);
                 }
 
-                // PATH 3: MULTI-PROXY RACING NETWORK (Integrating VIP keys and new SAMSAT API)
                 const isHttps = window.location.protocol === 'https:';
                 const requestPool = [];
 
-                // Defining API sources with custom response parse logic
-                const sourcesToFetch = [
-                    {
-                        name: "API Backend Baru",
-                        url: `http://202.155.143.156/backend/search?q=${encodeURIComponent(cleanQuery)}`,
-                        parse: (res) => (res.success && res.data ? res.data : null)
-                    },
-                    {
-                        name: "API DeltaForce VIP",
-                        url: `https://tnkb.deltaforce.space/?apikey=ae958b6e6869c10dddaec2283b3c824b&keyword=${encodeURIComponent(cleanQuery)}`,
-                        parse: (res) => (res.success && res.data ? res.data[0] : null)
-                    },
-                    {
-                        name: "API Server Cadangan",
-                        url: `${API_UTAMA_URL}${encodeURIComponent(cleanQuery)}`,
-                        parse: (res) => (Array.isArray(res) ? res[0] : res)
-                    }
+                const baseUrls = [
+                    `${API_UTAMA_1}${encodeURIComponent(cleanQuery)}`,
+                    `${API_UTAMA_2}${encodeURIComponent(cleanQuery)}`
                 ];
 
-                sourcesToFetch.forEach(src => {
-                    // direct request
-                    if (!isHttps || src.url.startsWith('https:')) {
-                        requestPool.push({ url: src.url, parse: src.parse, type: 'direct' });
-                    }
-
-                    // CORS Proxy Bypass engines
-                    requestPool.push({ url: `https://corsproxy.io/?${encodeURIComponent(src.url)}`, parse: src.parse, type: 'corsproxy_io' });
-                    requestPool.push({ url: `https://api.allorigins.win/raw?url=${encodeURIComponent(src.url)}`, parse: src.parse, type: 'allorigins_raw' });
-                    requestPool.push({ url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(src.url)}`, parse: src.parse, type: 'codetabs' });
-                    requestPool.push({ url: `https://thingproxy.freeboard.io/fetch/${src.url}`, parse: src.parse, type: 'thingproxy' });
-                    requestPool.push({ url: `https://allorigins.hexschool.workers.dev/raw?url=${encodeURIComponent(src.url)}`, parse: src.parse, type: 'allorigins_worker' });
-                    requestPool.push({ url: `https://api.allorigins.win/get?url=${encodeURIComponent(src.url)}`, parse: src.parse, type: 'allorigins_wrapped' });
+                baseUrls.forEach(baseUrl => {
+                    requestPool.push({ url: baseUrl, type: 'Direct APK Connection' });
+                    requestPool.push({ url: `https://api.allorigins.win/raw?url=${encodeURIComponent(baseUrl)}`, type: 'AllOrigins Raw' });
+                    requestPool.push({ url: `https://corsproxy.io/?${encodeURIComponent(baseUrl)}`, type: 'CORSProxy.io' });
+                    requestPool.push({ url: `https://allorigins.hexschool.workers.dev/raw?url=${encodeURIComponent(baseUrl)}`, type: 'Hexschool Cloudflare' });
+                    requestPool.push({ url: `https://api.allorigins.win/get?url=${encodeURIComponent(baseUrl)}`, type: 'AllOrigins Wrapped' });
+                    requestPool.push({ url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(baseUrl)}`, type: 'CodeTabs' });
                 });
 
                 let resolved = false;
@@ -554,14 +509,14 @@
                     activeRequests--;
                     if (activeRequests === 0 && !resolved) {
                         setLoading(false);
-                        showMsg("DATA TIDAK DITEMUKAN / JARINGAN ERROR");
+                        showMsg("DATA TIDAK DITEMUKAN / TIMEOUT");
                     }
                 };
 
                 requestPool.forEach((targetObj) => {
                     const ctrl = new AbortController();
                     controllers.push(ctrl);
-                    const id = setTimeout(() => ctrl.abort(), 12000); // 12 second maximum proxy racing timeout
+                    const id = setTimeout(() => ctrl.abort(), 6000); 
 
                     try {
                         fetch(targetObj.url, { signal: ctrl.signal })
@@ -571,9 +526,7 @@
                                 if (!res.ok) { handleFailure(); return; }
                                 
                                 const text = await res.text();
-                                const json = extractJson(text);
-                                const parsed = targetObj.parse(json);
-                                const vehicleData = findVehicleDataDeep(parsed);
+                                const vehicleData = unifyAndExtractVehicleData(text);
                                 
                                 if (vehicleData && !resolved) {
                                     cleanLoadingAndTransition(vehicleData);
@@ -608,63 +561,52 @@
                 
                 switch (cat) {
                     case 'Nama': 
-                        return extractField(item, ['NamaPemilik', 'nama_pemilik', 'Nama', 'nama', 'nm_pmlk']);
+                        return extractField(item, ['nama', 'NamaPemilik', 'nama_pemilik', 'Nama', 'nm_pmlk']);
                     case 'NIK': 
-                        return extractField(item, ['NIK', 'NoKTP', 'nik', 'no_ktp', 'identitas', 'no_identitas', 'ktp']);
+                        return extractField(item, ['ktp', 'NIK', 'NoKTP', 'nik', 'no_ktp', 'identitas', 'no_identitas']);
                     case 'HP': 
-                        return extractField(item, ['NoHP', 'MSSDN', 'msisdn', 'phone', 'no_hp', 'no_telp', 'hp']);
+                        return extractField(item, ['hp', 'NoHP', 'MSSDN', 'msisdn', 'phone', 'no_hp', 'no_telp']);
                     case 'Pekerjaan': 
-                        return extractField(item, ['Pekerjaan', 'pekerjaan', 'job', 'pekerjaan_pemilik']);
+                        return extractField(item, ['pekerjaan', 'Pekerjaan', 'job', 'pekerjaan_pemilik']);
                     case 'Alamat': 
-                        return extractField(item, ['Alamat', 'alamat', 'alamat_pemilik']);
+                        return extractField(item, ['alamat', 'Alamat', 'alamat_pemilik']);
                     case 'NopolServer': 
-                        // 1. Ambil langsung jika API mengembalikan nopol utuh (Contoh: "BL 1562 C" atau "B 1011 NOC")
-                        const directNopol = extractField(item, ['nopol', 'Nopol', 'no_polisi', 'noPolisi']);
-                        if (directNopol !== '-') {
-                            const cleanedDirect = directNopol.replace(/\s+/g, '').toUpperCase();
-                            // Jika format plat nomor valid (Berisi gabungan huruf dan angka)
-                            if (/^[A-Z]+\d+[A-Z]*$/.test(cleanedDirect)) {
-                                return cleanedDirect;
-                            }
-                        }
-
-                        // 2. Jika dipisahkan komponen wilayah, nomor, dan seri di API/Database offline
                         const w = extractField(item, ['wilayah', 'Wilayah', 'prefix', 'Prefix']).replace(/\s+/g, '').toUpperCase();
                         const n = extractField(item, ['nopol', 'Nopol', 'no_polisi', 'noPolisi']).replace(/\s+/g, '').toUpperCase();
                         const s = extractField(item, ['seri', 'Seri', 'suffix', 'Suffix']).replace(/\s+/g, '').toUpperCase();
                         
-                        let combined = '';
-                        if (w !== '-' && w !== '') combined += w;
-                        if (n !== '-' && n !== '') combined += n;
-                        if (s !== '-' && s !== '') combined += s;
-
-                        const finalCombined = combined.replace(/\s+/g, '').toUpperCase();
-                        if (finalCombined.length > 2 && /^[A-Z]+\d+[A-Z]*$/.test(finalCombined)) {
-                            return finalCombined;
+                        if (w !== '-' && n !== '-') {
+                            return `${w}${n}${s !== '-' ? s : ''}`;
                         }
                         
-                        // Fallback ke plat yang diinput pengguna jika data pecah
+                        const flatNopol = extractField(item, ['nopol', 'no_polisi', 'noPolisi']).replace(/\s+/g, '').toUpperCase();
+                        if (flatNopol !== '-') {
+                            if (/^\d+$/.test(flatNopol)) {
+                                return formatPlate(plate);
+                            }
+                            return flatNopol;
+                        }
                         return formatPlate(plate);
                     case 'Merk': 
-                        return extractField(item, ['Merk', 'Merek', 'merk', 'merek', 'brand']);
+                        return extractField(item, ['merk', 'Merk', 'Merek', 'merek', 'brand']);
                     case 'Tipe': 
-                        return extractField(item, ['Type', 'Tipe', 'type', 'tipe', 'model']);
+                        return extractField(item, ['type', 'Type', 'Tipe', 'tipe', 'model']);
                     case 'Tahun': 
-                        return extractField(item, ['TahunPembuatan', 'Tahun', 'tahun_pembuatan', 'tahun_buat', 'th_buat', 'tahun']);
+                        return extractField(item, ['tahun', 'TahunPembuatan', 'Tahun', 'tahun_pembuatan', 'tahun_buat', 'th_buat']);
                     case 'Warna': 
-                        return extractField(item, ['Warna', 'warna', 'warna_tnkb', 'warna_kendaraan']);
+                        return extractField(item, ['warna', 'Warna', 'warna_tnkb', 'warna_kendaraan']);
                     case 'CC': 
-                        return extractField(item, ['IsiCylinder', 'Cylinder', 'cylinder', 'isi_silinder', 'cc', 'isi_cylinder']);
+                        return extractField(item, ['cylinder', 'IsiCylinder', 'Cylinder', 'isi_silinder', 'cc', 'isi_cylinder']);
                     case 'Noka': 
-                        return extractField(item, ['NoRangka', 'noka', 'no_rangka', 'vin', 'no_frame']);
+                        return extractField(item, ['no_rangka', 'NoRangka', 'noka', 'vin', 'no_frame']);
                     case 'Nosin': 
-                        return extractField(item, ['NoMesin', 'nosin', 'no_mesin', 'no_engine']);
+                        return extractField(item, ['no_mesin', 'NoMesin', 'nosin', 'no_engine']);
                     case 'BPKB': 
-                        return extractField(item, ['NoBPKB', 'bpkb', 'no_bpkb']);
+                        return extractField(item, ['no_bpkb', 'NoBPKB', 'bpkb', 'no_bpkb']);
                     case 'STNK': 
-                        return extractField(item, ['NoSTNK', 'stnk', 'no_stnk']);
+                        return extractField(item, ['no_stnk', 'NoSTNK', 'stnk', 'no_stnk']);
                     case 'Tgl': 
-                        return extractField(item, ['TglDaftar', 'TanggalDaftar', 'tgl_daftar', 'tanggal_daftar', 'tglDaftar', 'tanggal_daftar']);
+                        return extractField(item, ['tanggal_daftar', 'TglDaftar', 'TanggalDaftar', 'tgl_daftar', 'tglDaftar']);
                     case 'APM': 
                         return extractField(item, ['APM', 'apm', 'atpm', 'AgenPemegangMerek', 'agen_pemegang_merek']);
                     default: 
@@ -702,6 +644,7 @@
 
             return (
                 <div className="mobile-shell bg-black">
+                    {/* Welcome Screen */}
                     {currentPage === 'welcome' && (
                         <div className="flex-1 flex flex-col items-center justify-between py-12 px-8 h-full relative overflow-y-auto scrollbar-hide">
                             <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[40%] bg-orange-600/10 blur-[150px] rounded-full" />
@@ -747,8 +690,7 @@
                                         inputMode="none" 
                                         value={plate} 
                                         onChange={(e) => setPlate(e.target.value.toUpperCase())} 
-                                        placeholder="NO. TNKB" 
-                                        className={`bg-transparent w-full text-center font-black uppercase placeholder:text-slate-800 ${plate.length > 10 ? 'text-2xl' : 'text-5xl'} text-white tracking-tighter outline-none border-none`}
+                                        className={`bg-transparent w-full text-center font-black uppercase ${plate.length > 10 ? 'text-2xl' : 'text-5xl'} text-white tracking-tighter outline-none border-none`}
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
                                                 e.preventDefault();
@@ -761,7 +703,7 @@
                                 {/* Banner Restricted Access Asli */}
                                 <div className="w-full text-center py-2.5 px-4 mb-2 border border-red-900/30 rounded-2xl bg-red-950/10">
                                     <p className="text-orange-500 font-black text-xs tracking-widest flex items-center justify-center gap-1.5">
-                                        🔓 UNLIMITED DATABASE
+                                        🔓UNLIMITED AKSES DATA
                                     </p>
                                     <p className="text-[9px] font-black text-slate-400 tracking-wider mt-0.5">
                                         DILARANG KERAS MENYALAHGUNAKAN SISTEM INI
@@ -772,38 +714,40 @@
                                 </div>
 
                                 <div className="mt-auto space-y-1">
+                                    {/* Action & Control Buttons Row (Pitch Black Style) */}
                                     <div className={`grid ${userRole === 'master' ? 'grid-cols-7' : 'grid-cols-6'} gap-[2px]`}>
-                                        <button type="button" onClick={() => setKbHeight(h => Math.max(15, h-2))} className="bg-slate-900 h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 font-black text-xl outline-none"><Icons.Minus /></button>
-                                        <button type="button" onClick={() => setKbHeight(h => Math.min(35, h+2))} className="bg-slate-900 h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 font-black text-xl outline-none"><Icons.Plus /></button>
-                                        <button type="button" onClick={startCamera} className="bg-slate-900 h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 outline-none"><Icons.Camera /></button>
-                                        <button type="button" onClick={async () => { try { const t = await navigator.clipboard.readText(); setPlate(t.toUpperCase().replace(/\s/g, '')); } catch(e){} }} className="bg-slate-900 h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 outline-none"><Icons.Paste /></button>
+                                        <button type="button" onClick={() => setKbHeight(h => Math.max(15, h-2))} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 font-black text-xl outline-none"><Icons.Minus /></button>
+                                        <button type="button" onClick={() => setKbHeight(h => Math.min(35, h+2))} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 font-black text-xl outline-none"><Icons.Plus /></button>
+                                        <button type="button" onClick={startCamera} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 outline-none"><Icons.Camera /></button>
+                                        <button type="button" onClick={async () => { try { const t = await navigator.clipboard.readText(); setPlate(t.toUpperCase().replace(/\s/g, '')); } catch(e){} }} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 outline-none"><Icons.Paste /></button>
                                         {userRole === 'master' && <button type="button" onClick={() => setCurrentPage('admin')} className="bg-orange-600/20 h-14 rounded-none key-press-effect flex items-center justify-center text-orange-500 border border-white/5 outline-none"><Icons.Shield /></button>}
                                         <button type="button" onClick={() => window.location.reload()} className="bg-red-600/20 h-14 rounded-none key-press-effect flex items-center justify-center text-red-500 border border-white/5 outline-none"><Icons.Power /></button>
                                         
                                         <button 
                                             type="button"
                                             onClick={handleSearchPress}
-                                            onTouchEnd={handleSearchPress}
                                             className="bg-orange-600 h-14 rounded-none key-press-effect flex items-center justify-center text-white shadow-lg border border-white/5 cursor-pointer active:bg-orange-700 outline-none"
                                         >
                                             <Icons.Search />
                                         </button>
                                     </div>
+                                    
+                                    {/* Numeric and Alphanumeric Keyboard (Pitch Black Style) */}
                                     <div className="flex flex-col gap-[2px]">
                                         <div className="grid grid-cols-5 gap-[2px]">
-                                            {['1','2','3'].map(n => <button type="button" key={n} onClick={() => setPlate(p => p+n)} style={{height: `${kbHeight * 2.8}px`}} className="bg-slate-900/60 text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none">{n}</button>)}
-                                            <button type="button" onClick={() => setPlate(p => p.slice(0,-1))} style={{height: `${kbHeight * 2.8}px`}} className="bg-slate-800 text-white rounded-none font-black text-sm key-press-effect border border-white/5 outline-none">DEL</button>
-                                            <button type="button" onClick={() => setPlate('')} style={{height: `${kbHeight * 2.8}px`}} className="bg-slate-800 text-white rounded-none font-black text-sm key-press-effect border border-white/5 outline-none">CLR</button>
+                                            {['1','2','3'].map(n => <button type="button" key={n} onClick={() => setPlate(p => p+n)} style={{height: `${kbHeight * 2.8}px`}} className="bg-black text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none">{n}</button>)}
+                                            <button type="button" onClick={() => setPlate(p => p.slice(0,-1))} style={{height: `${kbHeight * 2.8}px`}} className="bg-red-600 text-white rounded-none font-black text-sm key-press-effect border border-white/5 outline-none">DEL</button>
+                                            <button type="button" onClick={() => setPlate('')} style={{height: `${kbHeight * 2.8}px`}} className="bg-red-600 text-white rounded-none font-black text-sm key-press-effect border border-white/5 outline-none">CLR</button>
                                         </div>
                                         <div className="grid grid-cols-4 gap-[2px]">
-                                            {['4','5','6','0'].map(n => <button type="button" key={n} onClick={() => setPlate(p => p+n)} style={{height: `${kbHeight * 2.8}px`}} className="bg-slate-900/60 text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none">{n}</button>)}
+                                            {['4','5','6','0'].map(n => <button type="button" key={n} onClick={() => setPlate(p => p+n)} style={{height: `${kbHeight * 2.8}px`}} className="bg-black text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none">{n}</button>)}
                                         </div>
                                         <div className="grid grid-cols-3 gap-[2px]">
-                                            {['7','8','9'].map(n => <button type="button" key={n} onClick={() => setPlate(p => p+n)} style={{height: `${kbHeight * 2.8}px`}} className="bg-slate-900/60 text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none">{n}</button>)}
+                                            {['7','8','9'].map(n => <button type="button" key={n} onClick={() => setPlate(p => p+n)} style={{height: `${kbHeight * 2.8}px`}} className="bg-black text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none">{n}</button>)}
                                         </div>
                                         <div className="flex flex-col gap-[2px] pt-1">
                                             {[ ['Q','W','E','R','T','Y','U','I','O','P'], ['A','S','D','F','G','H','J','K','L'], ['Z','X','C','V','B','N','M'] ].map((row, i) => (
-                                                <div key={i} className="flex gap-[2px] justify-center">{row.map(char => ( <button type="button" key={char} onClick={() => setPlate(p => p+char)} style={{height: `${kbHeight * 3.2}px`}} className="flex-1 bg-slate-950 text-white rounded-none border border-white/5 text-xl font-black key-press-effect outline-none">{char}</button> ))}</div>
+                                                <div key={i} className="flex gap-[2px] justify-center">{row.map(char => ( <button type="button" key={char} onClick={() => setPlate(p => p+char)} style={{height: `${kbHeight * 3.2}px`}} className="flex-1 bg-black text-white rounded-none border border-white/5 text-xl font-black key-press-effect outline-none">{char}</button> ))}</div>
                                             ))}
                                         </div>
                                     </div>
@@ -826,43 +770,7 @@
                                     <p className="text-[10px] font-black text-orange-500 tracking-wider uppercase">LAPORAN TERSEGEL - DATA ASLI KHUSUS SAMSAT</p>
                                 </div>
                                 <div className="bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] p-8 font-mono-custom text-[13px] text-white/90 leading-relaxed whitespace-pre-wrap break-words w-full shadow-2xl shimmer pointer-events-auto">
-                                    {`___________________________________
-🇮🇩 SUMBER : APLIKASI CSID.PRO 📡
---------------------------------------------
-🕵 IDENTITAS PEMILIK :
---------------------------------------------
-NAMA : ${getVal('Nama')}
-NIK : ${getVal('NIK')}
-MSSDN : ${getVal('HP')}
-PEKERJAAN : ${getVal('Pekerjaan')}
-ALAMAT : ${getVal('Alamat')}
---------------------------------------------
-🚘 DATA KENDARAAN :
---------------------------------------------
-NOPOL : ${getVal('NopolServer')}
-MEREK : ${getVal('Merk')}
-TYPE : ${getVal('Tipe')}
-TAHUN : ${getVal('Tahun')}
-WARNA : ${getVal('Warna')}
-CYLINDER : ${getVal('CC')}
---------------------------------------------
-📙 DOKUMEN RESMI :
---------------------------------------------
-NOKA : ${getVal('Noka')}
-NOSIN : ${getVal('Nosin')}
-NO. BPKB : ${getVal('BPKB')}
-NO. STNK : ${getVal('STNK')}
-TGL DAFTAR : ${getVal('Tgl')}
-APM : ${getVal('APM')}
---------------------------------------------
-👇LINK DAFTAR APLIKASI :
---------------------------------------------
-📱 Hub: https://wa.me/628136900872
---------------------------------------------
-✍ NOTE :
---------------------------------------------
-DATA INI SEBAGAI ALAT BUKTI KEPEMILIKAN KENDARAAN YANG SAH SESUAI TNKB YANG BERLAKU ⚖️.
-___________________________________`}
+                                    {`___________________________________\n🇮🇩 SUMBER : APLIKASI CSID.PRO 📡\n--------------------------------------------\n🕵 IDENTITAS PEMILIK :\n--------------------------------------------\nNAMA : ${getVal('Nama')}\nNIK : ${getVal('NIK')}\nMSSDN : ${getVal('HP')}\nPEKERJAAN : ${getVal('Pekerjaan')}\nALAMAT : ${getVal('Alamat')}\n--------------------------------------------\n🚘 DATA KENDARAAN :\n--------------------------------------------\nNOPOL : ${getVal('NopolServer')}\nMEREK : ${getVal('Merk')}\nTYPE : ${getVal('Tipe')}\nTAHUN : ${getVal('Tahun')}\nWARNA : ${getVal('Warna')}\nCYLINDER : ${getVal('CC')}\n--------------------------------------------\n📙 DOKUMEN RESMI :\n--------------------------------------------\nNOKA : ${getVal('Noka')}\nNOSIN : ${getVal('Nosin')}\nNO. BPKB : ${getVal('BPKB')}\nNO. STNK : ${getVal('STNK')}\nTGL DAFTAR : ${getVal('Tgl')}\nAPM : ${getVal('APM')}\n--------------------------------------------\n👇LINK DAFTAR APLIKASI :\n--------------------------------------------\n📱 Hub: https://wa.me/628136900872\n--------------------------------------------\n✍ NOTE :\n--------------------------------------------\nDATA INI SEBAGAI ALAT BUKTI KEPEMILIKAN KENDARAAN YANG SAH SESUAI TNKB YANG BERLAKU ⚖️.\n___________________________________`}
                                 </div>
                                 <div className="mt-8 space-y-4 w-full">
                                     <button type="button" onClick={() => {
@@ -942,7 +850,7 @@ ___________________________________`}
                     {notification && <div className="fixed top-16 left-1/2 -translate-x-1/2 z-[9999] bg-orange-600 text-white px-12 py-5 rounded-[2rem] font-black text-[11px] shadow-[0_0_40px_rgba(249, 115, 22, 0.4)] animate-bounce uppercase border-2 border-white/20 whitespace-nowrap tracking-widest">{notification}</div>}
                     
                     {/* Loader */}
-                    {loading && <div className="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[9000] flex items-center justify-center"><div className="flex flex-col items-center"><div className="w-20 h-20 border-[6px] border-white/5 border-t-orange-600 rounded-full animate-spin mb-8 shadow-lg" /><p className="text-white font-black uppercase text-[10px] tracking-[0.6em] animate-pulse text-glow">LOADING</p></div></div>}
+                    {loading && <div className="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[9000] flex items-center justify-center"><div className="flex flex-col items-center"><div className="w-20 h-20 border-[6px] border-white/5 border-t-orange-600 rounded-full turbo-spin mb-8 shadow-lg" /><p className="text-white font-black uppercase text-[10px] tracking-[0.6em] animate-pulse text-glow">Sedang Memuat Data</p></div></div>}
                 </div>
             );
         };
