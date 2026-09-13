@@ -43,7 +43,7 @@
         .scan-guide { border: 3px solid rgba(249, 115, 22, 0.7); box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.65); }
         @media print { body { display: none !important; } }
         /* Turbo Spin Loader Optimization */
-        .turbo-spin { animation: spin 0.1s linear infinite !important; }
+        .turbo-spin { animation: spin 0.3s linear infinite !important; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -54,7 +54,7 @@
         const { useState, useEffect, useRef } = React;
 
         const MASTER_PIN = "280189"; 
-        const ADMIN_WA = "6281318703993";
+        const ADMIN_WA = "6281947291324";
         const APP_ID = 'csid-intelligence-pro';
         
         // DOUBLE API KEY SAMSAT NASIONAL
@@ -651,11 +651,11 @@
                         <div className="flex-1 flex flex-col items-center justify-between py-12 px-8 h-full relative overflow-y-auto scrollbar-hide">
                             <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[40%] bg-orange-600/10 blur-[150px] rounded-full" />
                             <div className="text-center z-10 mt-6 space-y-1.5">
-                                <p className="text-[15px] font-black uppercase tracking-tight text-orange-500 leading-tight">SELAMAT DATANG DI APLIKASI</p>
-                                <p className="text-[15px] font-black uppercase tracking-tight leading-tight text-white">CSID.PRO NASIONAL</p>
+                                <p className="text-[15px] font-black uppercase tracking-tight text-white-500 leading-tight">SELAMAT DATANG DI APLIKASI</p>
+                                <p className="text-[15px] font-black uppercase tracking-tight leading-tight text-white">ETLE</p>
                             </div>
                             <div className="flex flex-col items-center z-10">
-                                <h1 onClick={() => { setAdminTapCount(c => c + 1); if(adminTapCount === 4) setShowPinModal(true); }} className="text-[25px] font-black text-white text-glow cursor-pointer tracking-tighter">𝘼𝙋𝙋 𝙍𝘼𝙉𝙈𝙊𝙍 𝙄𝙉𝙏𝙀𝙇𝙄𝙅𝙀𝙉𝙏</h1>
+                                <h1 onClick={() => { setAdminTapCount(c => c + 1); if(adminTapCount === 4) setShowPinModal(true); }} className="text-[40px] font-black text-white text-glow cursor-pointer tracking-tighter">DATA NOPOL</h1>
                                 <div className="h-1 w-20 bg-orange-500 rounded-full -mt-2 animate-pulse" />
                             </div>
                             <div className="w-full flex flex-col items-center gap-6 mb-8 z-10">
@@ -677,7 +677,7 @@
                             <header className="px-6 py-5 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-md z-50">
                                 <div className="flex items-center gap-3 text-white">
                                     <div className="bg-orange-600 p-1.5 rounded-lg shadow-[0_0_15px_rgba(249,115,22,0.4)]"><Icons.Shield cls="w-5 h-5 text-white" /></div>
-                                    <span className="font-black text-2xl tracking-tighter">ONE CLICK</span>
+                                    <span className="font-black text-2xl tracking-tighter">DATA NOPOL</span>
                                 </div>
                                 {renderStatusOverlay()}
                             </header>
@@ -769,10 +769,10 @@
                             <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 scrollbar-hide pb-32 w-full" style={{ WebkitOverflowScrolling: 'touch' }}>
                                 <div className="mb-4 bg-orange-600/10 border border-orange-600/30 rounded-2xl px-5 py-3 flex items-center gap-3 w-full animate-pulse">
                                     <span className="text-orange-500 font-bold text-sm">✅</span>
-                                    <p className="text-[10px] font-black text-orange-500 tracking-wider uppercase">DATA TNKB ASLI - DITEMUKAN</p>
+                                    <p className="text-[10px] font-black text-orange-500 tracking-wider uppercase">DATA NOPOL DITEMUKAN</p>
                                 </div>
                                 <div className="bg-black border border-white/5 rounded-[2.5rem] p-8 font-mono-custom text-[13px] text-white/90 leading-relaxed whitespace-pre-wrap break-words w-full shadow-2xl shimmer pointer-events-auto">
-                                    {`\n🆔 DATA NOPOL DI TEMUKAN\n------------------------------\n🚻 IDENTITAS PEMILIK TNKB:\n------------------------------\nNAMA : ${getVal('Nama')}\nNIK : ${getVal('NIK')}\nMSSDN : ${getVal('HP')}\nPEKERJAAN : ${getVal('Pekerjaan')}\n------------------------------\n🏠 ALAMAT : ${getVal('Alamat')}\n------------------------------\n🚗 DATA KENDARAAN :\n------------------------------\nNO.PLAT : ${getVal('NopolServer')}\nMEREK : ${getVal('Merk')}\nTYPE : ${getVal('Tipe')}\nTAHUN : ${getVal('Tahun')}\nWARNA : ${getVal('Warna')}\nCYLINDER : ${getVal('CC')}\n------------------------------\n📙 DOKUMEN RESMI KENDARAAN :\n------------------------------\nNOKA : ${getVal('Noka')}\nNOSIN : ${getVal('Nosin')}\nNO. BPKB : ${getVal('BPKB')}\nNO. STNK : ${getVal('STNK')}\nTGL DAFTAR : ${getVal('Tgl')}\nAPM : ${getVal('APM')}\n------------------------------\n📶 SERVER ONLINE 24 JAM:\n------------------------------\n🆘 DATA ASLI JANGAN DI SALAH GUNAKAN.\n------------------------------`}
+                                    {`\n🚔 DATA NOPOL DI TEMUKAN\n---------------------------------------------\n🚻 IDENTITAS PEMILIK TNKB:\n---------------------------------------------\nNAMA : ${getVal('Nama')}\nNIK : ${getVal('NIK')}\nMSSDN : ${getVal('HP')}\nPEKERJAAN : ${getVal('Pekerjaan')}\n---------------------------------------------\n🏘 ALAMAT : ${getVal('Alamat')}\n---------------------------------------------\n🚗 DATA KENDARAAN :\n---------------------------------------------\nNO.PLAT : ${getVal('NopolServer')}\nMEREK : ${getVal('Merk')}\nTYPE : ${getVal('Tipe')}\nTAHUN : ${getVal('Tahun')}\nWARNA : ${getVal('Warna')}\nCYLINDER : ${getVal('CC')}\n---------------------------------------------\n📙 DOKUMEN RESMI KENDARAAN :\n---------------------------------------------\nNOKA : ${getVal('Noka')}\nNOSIN : ${getVal('Nosin')}\nNO. BPKB : ${getVal('BPKB')}\nNO. STNK : ${getVal('STNK')}\nTGL DAFTAR : ${getVal('Tgl')}\nAPM : ${getVal('APM')}\n---------------------------------------------\n📶 SERVER ONLINE 24 JAM:\n---------------------------------------------\n🆘 DATA ASLI JANGAN DI SALAH GUNAKAN.\n---------------------------------------------`}
                                 </div>
                                 <div className="mt-8 space-y-4 w-full">
                                     <button type="button" onClick={() => {
@@ -852,7 +852,7 @@
                     {notification && <div className="fixed top-16 left-1/2 -translate-x-1/2 z-[9999] bg-orange-600 text-white px-12 py-5 rounded-[2rem] font-black text-[11px] shadow-[0_0_40px_rgba(249, 115, 22, 0.4)] animate-bounce uppercase border-2 border-white/20 whitespace-nowrap tracking-widest">{notification}</div>}
                     
                     {/* Loader */}
-                    {loading && <div className="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[9000] flex items-center justify-center"><div className="flex flex-col items-center"><div className="w-20 h-20 border-[6px] border-white/5 border-t-orange-600 rounded-full turbo-spin mb-8 shadow-lg" /><p className="text-white font-black uppercase text-[10px] tracking-[0.6em] animate-pulse text-glow">𝙇𝙊𝘼𝘿𝙄𝙉𝙂 𝘿𝘼𝙏𝘼 𝙒𝘼𝙄𝙏</p></div></div>}
+                    {loading && <div className="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[9000] flex items-center justify-center"><div className="flex flex-col items-center"><div className="w-20 h-20 border-[6px] border-white/5 border-t-orange-600 rounded-full turbo-spin mb-8 shadow-lg" /><p className="text-orange font-black uppercase text-[10px] tracking-[0.6em] animate-pulse text-glow">𝙎𝙄𝙎𝙏𝙀𝙈 𝙊𝙉𝙇𝙄𝙉𝙀</p></div></div>}
                 </div>
             );
         };
