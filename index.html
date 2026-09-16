@@ -574,7 +574,7 @@
                         return extractField(item, ['alamat', 'Alamat', 'alamat_pemilik']);
                         case 'NopolServer': {
                         const w = extractField(item, ['wilayah', 'Wilayah', 'prefix', 'Prefix', 'SeriWilayah']).replace(/\s+/g, '').toUpperCase();
-                        const n = extractField(item, ['nopol', 'Nopol', 'no_polisi', 'noPolisi', 'Nopol1']).replace(/\s+/g, '').toUpperCase();
+                        const n = extractField(item, ['nopol', 'Nopol', 'no_polisi', 'noPolisi', 'Nopol1', 'plat_nomor']).replace(/\s+/g, '').toUpperCase();
                         const s = extractField(item, ['seri', 'Seri', 'suffix', 'Suffix']).replace(/\s+/g, '').toUpperCase();
 
                         let hasilNopol = '';
