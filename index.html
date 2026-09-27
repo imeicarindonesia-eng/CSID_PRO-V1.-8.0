@@ -630,8 +630,8 @@
 
             const renderStatusOverlay = () => (
                 <div className="text-right glass-panel px-3 py-1.5 rounded-xl border border-white/10 z-[60]">
-                    <p className="text-[10px] font-black uppercase text-orange-500">ID: {activePin}</p>
-                    <p className="text-[9px] font-black text-slate-400">SISA: {getRemainingTime(userExpiry)}</p>
+                    <p className="text-[10px] font-black uppercase text-red-600">ID: {activePin}</p>
+                    <p className="text-[9px] font-black text-white-600">SISA: {getRemainingTime(userExpiry)}</p>
                 </div>
             );
 
@@ -675,7 +675,7 @@
                         <div className="flex-1 flex flex-col h-full bg-black">
                             <header className="px-6 py-5 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-md z-50">
                                 <div className="flex items-center gap-3 text-white">
-                                    <div className="bg-orange-600 p-1.5 rounded-lg shadow-[0_0_15px_rgba(249,115,22,0.4)]"><Icons.Shield cls="w-5 h-5 text-white" /></div>
+                                    <div className="bg-red-600 p-1.5 rounded-lg shadow-[0_0_15px_rgba(249,115,22,0.4)]"><Icons.Shield cls="w-5 h-5 text-white" /></div>
                                     <span className="font-black text-2xl tracking-tighter">𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋</span>
                                 </div>
                                 {renderStatusOverlay()}
