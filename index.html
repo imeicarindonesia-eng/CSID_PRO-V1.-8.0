@@ -490,9 +490,14 @@
                 const requestPool = [];
 
                 const baseUrls = [
-                    `${API_UTAMA_1}${encodeURIComponent(cleanQuery)}`,
-                    `${API_UTAMA_2}${encodeURIComponent(cleanQuery)}`
+                  `${API_UTAMA_1}${encodeURIComponent(cleanQuery)}`,
+                  `${API_UTAMA_2}${encodeURIComponent(cleanQuery)}`,
+                  `${API_UTAMA_3}${encodeURIComponent(cleanQuery)}`
                 ];
+
+                    
+                    
+                
 
                 baseUrls.forEach(baseUrl => {
                     requestPool.push({ url: baseUrl, type: 'Direct APK Connection' });
