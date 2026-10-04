@@ -815,7 +815,7 @@
                                     <button type="button" onClick={() => {
                                         const text = document.querySelector('.shimmer').innerText;
                                         copyToClipboard(text);
-                                    }} className="w-full bg-white text-black py-5 rounded-[2rem] font-black text-lg uppercase shadow-xl active:scale-95 transition-all outline-none">SALIN DATA LAPORAN</button>
+                                    }} className="w-full bg-white text-black py-5 rounded-[2rem] font-black text-lg uppercase shadow-xl active:scale-95 transition-all outline-none">SALIN HASIL</button>
                                     <button type="button" onClick={() => {
                                         const text = document.querySelector('.shimmer').innerText;
                                         shareToWhatsApp(text);
@@ -889,7 +889,7 @@
                     {notification && <div className="fixed top-16 left-1/2 -translate-x-1/2 z-[9999] bg-orange-600 text-white px-12 py-5 rounded-[2rem] font-black text-[11px] shadow-[0_0_40px_rgba(249, 115, 22, 0.4)] animate-bounce uppercase border-2 border-white/20 whitespace-nowrap tracking-widest">{notification}</div>}
                     
                     {/* Loader */}
-                    {loading && <div className="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[9000] flex items-center justify-center"><div className="flex flex-col items-center"><div className="w-20 h-20 border-[6px] border-white/5 border-t-gray-600 rounded-full turbo-spin mb-8 shadow-lg" /><p className="text-orange font-black uppercase text-[10px] tracking-[0.6em] animate-pulse text-glow">𝐌𝐄𝐌𝐔𝐀𝐓 𝐃𝐀𝐓𝐀</p></div></div>}
+                    {loading && <div className="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[9000] flex items-center justify-center"><div className="flex flex-col items-center"><div className="w-20 h-20 border-[6px] border-white/5 border-t-gray-600 rounded-full turbo-spin mb-8 shadow-lg" /><p className="text-orange font-black uppercase text-[10px] tracking-[0.6em] animate-pulse text-glow">𝐋𝐨𝐚𝐝𝐢𝐧𝐠...</p></div></div>}
                 </div>
             );
         };
