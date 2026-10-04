@@ -533,7 +533,7 @@
                     activeRequests--;
                     if (activeRequests === 0 && !resolved) {
                         setLoading(false);
-                        showMsg("DATA TIDAK DITEMUKAN / TIMEOUT");
+                        showMsg("SERVER LAGI RESET WAIT");
                     }
                 };
 
@@ -702,7 +702,7 @@
                                 </div>
                                 <div className="w-full space-y-4 max-w-[340px]">
                                     <button type="button" onClick={handleLoginOnline} className="w-full bg-white text-black py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.Shield cls="w-5 h-5" /> 𝐋𝐎𝐆𝐈𝐍</button>
-                                    <button type="button" onClick={() => window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Aktivasi ID: '+registrationId)}`)} className="w-full bg-[#108a6e] text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3">𝐏𝐄𝐍𝐃𝐀𝐅𝐓𝐀𝐑𝐀𝐍</button>
+                                    <button type="button" onClick={() => window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Saya Mau Daftar Aplikasi 𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋 Bantu Aktifkan ID berikut ini : '+registrationId)}`)} className="w-full bg-[#108a6e] text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3">𝐏𝐄𝐍𝐃𝐀𝐅𝐓𝐀𝐑𝐀𝐍</button>
                                 </div>
                             </div>
                         </div>
@@ -748,7 +748,7 @@
                                        HARAP GUNAKAN APLIKASI DENGAN BIJAK & TIDAK DI SALAH GUNAKAN
                                     </p>
                                     <p className="text-[8px] font-bold text-white-600 tracking-wider">
-                                       JIKA KETAHUAN ID AKAN BANNED PERMANEN ✅
+                                       JIKA KETAHUAN ID AKAN BANNED PERMANEN TANPA REFUND ✅
                                     </p>
                                 </div>
 
