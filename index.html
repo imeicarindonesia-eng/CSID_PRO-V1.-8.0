@@ -803,7 +803,7 @@
                                 <p className="text-[20px] font-black uppercase tracking-tight leading-tight text-white">𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋.𝐏𝐑𝐎</p>
                             </div>
                             <div className="flex flex-col items-center z-10">
-                                <h1 onClick={() => { setAdminTapCount(c => c + 1); if(adminTapCount === 4) setShowPinModal(true); }} className="text-[26px] font-black text-white cursor-pointer tracking-tighter">𝐄 - 𝐏𝐋𝐀𝐓 𝐄𝐍𝐆𝐈𝐍𝐄 𝐒𝐈𝐒𝐓𝐄𝐌</h1>
+                                <h1 onClick={() => { setAdminTapCount(c => c + 1); if(adminTapCount === 4) setShowPinModal(true); }} className="text-[26px] font-black text-white cursor-pointer tracking-tighter">𝐄 𝐏𝐋𝐀𝐓 𝐄𝐍𝐆𝐈𝐍𝐄 𝐒𝐈𝐒𝐓𝐄𝐌</h1>
                                 <div className="h-1 w-20 bg-purple-500 rounded-full -mt-2 animate-pulse" />
                             </div>
                             <div className="w-full flex flex-col items-center gap-6 mb-8 z-10">
@@ -833,7 +833,7 @@
                                 <div className="animate-marquee px-4 text-[10px] font-black uppercase tracking-widest text-purple-400">{broadcast}</div>
                             </div>
                             <main className="flex-1 flex flex-col px-4 pb-6 relative overflow-hidden">
-                                <div className="w-full h-24 border-2 border-purple-500/40 rounded-3xl bg-purple-600/5 flex items-center justify-center px-8 mb-4 mt-6 shadow-[0_0_20px_rgba(168,85,247,0.15)]">
+                                <div className="w-full h-28 border-2 border-purple-500/40 rounded-3xl bg-purple-600/5 flex items-center justify-center px-8 mb-4 mt-6 shadow-[0_0_20px_rgba(168,85,247,0.15)]">
                                     <input 
                                         ref={inputRef} 
                                         type="text" 
@@ -1042,7 +1042,6 @@
                                                             {filteredLog.map((item, index) => {
                                                                 const seqNum = `#${index + 1}`;
                                                                 const officerDisp = item.petugas_name || item.activated_by || 'ADMIN';
-                                                                const pkgDisp = item.package || 'DATA NOPOL';
                                                                 const itemTime = item.activated_at || item.created_at;
 
                                                                 return (
@@ -1060,8 +1059,8 @@
                                                                                 <span className="bg-red-900/40 border border-red-600/40 text-red-200 text-[9px] font-black px-2.5 py-1 rounded-xl uppercase">
                                                                                     {officerDisp}
                                                                                 </span>
-                                                                                <span className="bg-white text-black text-[10px] font-black px-3 py-1 rounded-xl uppercase tracking-wider shadow-sm">
-                                                                                    {pkgDisp}
+                                                                                <span className="bg-emerald-600 text-white text-[9px] font-black px-2.5 py-1 rounded-xl uppercase tracking-wider shadow-sm border border-emerald-400/30">
+                                                                                    TELAH DIAKTIFKAN
                                                                                 </span>
                                                                             </div>
                                                                         </div>
@@ -1535,7 +1534,7 @@
                                 <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden relative mb-6 border border-purple-500/30 shadow-inner">
                                     <div className="absolute h-full bg-purple-500 rounded-full animate-line-bar shadow-[0_0_12px_rgba(168,85,247,0.8)]" />
                                 </div>
-                                <p className="text-white font-black uppercase text-[10px] tracking-[0.5em] animate-pulse">PROFESIONAL AKSES</p>
+                                <p className="text-white font-black uppercase text-[10px] tracking-[0.5em] animate-pulse">TUNGGU SEBENTAR</p>
                             </div>
                         </div>
                     )}
