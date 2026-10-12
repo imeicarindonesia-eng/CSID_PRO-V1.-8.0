@@ -771,7 +771,7 @@
                         </div>
                         <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-2">PEMELIHARAAN SISTEM</h2>
                         <p className="text-xs text-slate-400 font-bold max-w-[280px] leading-relaxed mb-8">
-                            Aplikasi DATA NOPOL sedang dalam pemeliharaan berkala. Akses akan terbuka kembali secara otomatis setelah pemeliharaan selesai.
+                            Aplikasi DATA NOPOL sedang dalam pemeliharaan berkala. Akses akan terbuka kembali secara otomatis, setelah pemeliharaan selesai.
                         </p>
                         <button type="button" onClick={() => window.location.reload()} className="w-full max-w-[240px] bg-[#181a2e] text-white border border-purple-500/30 py-4 rounded-2xl font-black text-xs uppercase shadow-lg active:scale-95 transition-transform">CEK ULANG KONEKSI</button>
 
@@ -812,8 +812,8 @@
                                     <p className="text-[60px] font-black text-white font-mono-custom tracking-tighter">{registrationId}</p>
                                 </div>
                                 <div className="w-full space-y-4 max-w-[340px]">
-                                    <button type="button" onClick={handleLoginOnline} className="w-full bg-purple-600 text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.Shield cls="w-5 h-5 text-white" /> LOGIN AKUN</button>
-                                    <button type="button" onClick={() => window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Halo Admin Master DATA NOPOL, saya mau aktivasi ID: '+registrationId)}`)} className="w-full bg-[#108a6e] text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3">PENDAFTARAN ID BARU</button>
+                                    <button type="button" onClick={handleLoginOnline} className="w-full bg-purple-600 text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.Shield cls="w-5 h-5 text-white" /> LOGIN APLIKASI </button>
+                                    <button type="button" onClick={() => window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Saya Mau Aktivasi Aplikasi 𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋, Bantu Aktifkan ID berikut ini : '+registrationId)}`)} className="w-full bg-[#108a6e] text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3">KLIK DAFTAR</button>
                                 </div>
                             </div>
                         </div>
@@ -852,13 +852,13 @@
 
                                 <div className="w-full text-center py-2.5 px-4 mb-2 border border-purple-900/40 rounded-2xl bg-purple-950/30">
                                     <p className="text-purple-300 font-black text-xs tracking-widest flex items-center justify-center gap-1.5">
-                                        🛜 MASTER VEHICLE DATA ENGINE
+                                        🚫 JANGAN LAKUKAN INI
                                     </p>
                                     <p className="text-[9px] font-black text-purple-200/70 tracking-wider mt-0.5">
-                                        SISTEM PUSAT DATA NOPOL INDUK TERINTEGRASI NASIONAL.
+                                        DILARANG MELAKUKAN SPAM CHEK TERUS-MENERUS
                                     </p>
                                     <p className="text-[8px] font-bold text-slate-500 tracking-wider">
-                                        HAK CIPTA DATA NOPOL PRO DIGITAL INTELLIGENCE
+                                        BISA MENGAKIBATKAN ID ANDA TERBLOKIR TANPA REFUND
                                     </p>
                                 </div>
 
@@ -1534,7 +1534,7 @@
                                 <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden relative mb-6 border border-purple-500/30 shadow-inner">
                                     <div className="absolute h-full bg-purple-500 rounded-full animate-line-bar shadow-[0_0_12px_rgba(168,85,247,0.8)]" />
                                 </div>
-                                <p className="text-white font-black uppercase text-[10px] tracking-[0.5em] animate-pulse">LOADING......</p>
+                                <p className="text-white font-black uppercase text-[10px] tracking-[0.5em] animate-pulse">Sedang Import Data...</p>
                             </div>
                         </div>
                     )}
