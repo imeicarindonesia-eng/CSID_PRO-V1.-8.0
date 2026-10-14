@@ -555,8 +555,8 @@
             };
 
             /**
-             * FUNGSI PENCARIAN MULTI-FIELD FIREBASE FIRESTORE REAL-TIME
-             * Mencari berdasarkan: NOPOL / Document ID, NOKA, NOSIN, NIK/KTP, dan Nama
+             * FUNGSI PENCARIAN MULTI-FIELD FIREBASE FIRESTORE REAL-TIME (PARALEL INSTAN)
+             * Mencari secara serentak / paralel: NOPOL / Document ID, NOKA, NOSIN, NIK/KTP, dan Nama
              */
             const cariDataFirebaseMultiField = async (searchQuery) => {
                 if (!db || !searchQuery) return null;
@@ -565,13 +565,13 @@
                 const queryRaw = searchQuery.trim().toUpperCase();
 
                 try {
-                    // STEP 1: Cek langsung ke Document ID (Nopol)
+                    // STEP 1: Cek langsung ke Document ID (Paling Cepat untuk Nopol)
                     const docDirect = await db.collection('pencarian').doc(queryClean).get();
                     if (docDirect.exists) {
                         return docDirect.data();
                     }
 
-                    // STEP 2: Lakukan Query Firestore ke Field Lain
+                    // STEP 2: Lakukan Query Firestore Secara Paralel / Serentak (Seketika Muncul)
                     const collectionRef = db.collection('pencarian');
                     const targetFields = [
                         'nopol', 'Nopol', 'no_polisi', 'NopolServer',
@@ -581,19 +581,20 @@
                         'nama', 'NamaPemilik', 'nama_pemilik', 'Nama', 'nm_pmlk'
                     ];
 
+                    // Kumpulkan semua request ke dalam array promises untuk dikirim sekaligus
+                    const queryPromises = [];
                     for (const fieldName of targetFields) {
-                        // Versi Tanpa Spasi
-                        let snapshot = await collectionRef.where(fieldName, "==", queryClean).limit(1).get();
+                        queryPromises.push(collectionRef.where(fieldName, "==", queryClean).limit(1).get());
+                        if (queryRaw !== queryClean) {
+                            queryPromises.push(collectionRef.where(fieldName, "==", queryRaw).limit(1).get());
+                        }
+                    }
+
+                    // Eksekusi seluruh pencarian field secara bersamaan (Parallel Execution)
+                    const snapshots = await Promise.all(queryPromises);
+                    for (const snapshot of snapshots) {
                         if (!snapshot.empty) {
                             return snapshot.docs[0].data();
-                        }
-
-                        // Versi Teks Asli (jika mengandung spasi)
-                        if (queryRaw !== queryClean) {
-                            snapshot = await collectionRef.where(fieldName, "==", queryRaw).limit(1).get();
-                            if (!snapshot.empty) {
-                                return snapshot.docs[0].data();
-                            }
                         }
                     }
 
