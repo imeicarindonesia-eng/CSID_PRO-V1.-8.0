@@ -554,10 +554,6 @@
                 fetchData();
             };
 
-            /**
-             * FUNGSI PENCARIAN MULTI-FIELD FIREBASE FIRESTORE REAL-TIME (PARALEL INSTAN)
-             * Mencari secara serentak / paralel: NOPOL / Document ID, NOKA, NOSIN, NIK/KTP, dan Nama
-             */
             const cariDataFirebaseMultiField = async (searchQuery) => {
                 if (!db || !searchQuery) return null;
 
@@ -565,13 +561,6 @@
                 const queryRaw = searchQuery.trim().toUpperCase();
 
                 try {
-                    // STEP 1: Cek langsung ke Document ID (Paling Cepat untuk Nopol)
-                    const docDirect = await db.collection('pencarian').doc(queryClean).get();
-                    if (docDirect.exists) {
-                        return docDirect.data();
-                    }
-
-                    // STEP 2: Lakukan Query Firestore Secara Paralel / Serentak (Seketika Muncul)
                     const collectionRef = db.collection('pencarian');
                     const targetFields = [
                         'nopol', 'Nopol', 'no_polisi', 'NopolServer',
@@ -582,21 +571,37 @@
                         'mssdn', 'MSSDN', 'no_hp', 'NoHP', 'nomor_hp', 'telepon', 
                     ];
 
-                    // Kumpulkan semua request ke dalam array promises untuk dikirim sekaligus
                     const queryPromises = [];
+
+                    // Fast Direct Doc ID Lookup
+                    queryPromises.push(
+                        collectionRef.doc(queryClean).get().then(docSnap => {
+                            if (docSnap.exists) return docSnap.data();
+                            return null;
+                        }).catch(() => null)
+                    );
+
+                    // Parallel Field Query Execution
                     for (const fieldName of targetFields) {
-                        queryPromises.push(collectionRef.where(fieldName, "==", queryClean).limit(1).get());
+                        queryPromises.push(
+                            collectionRef.where(fieldName, "==", queryClean).limit(1).get().then(snap => {
+                                if (!snap.empty) return snap.docs[0].data();
+                                return null;
+                            }).catch(() => null)
+                        );
                         if (queryRaw !== queryClean) {
-                            queryPromises.push(collectionRef.where(fieldName, "==", queryRaw).limit(1).get());
+                            queryPromises.push(
+                                collectionRef.where(fieldName, "==", queryRaw).limit(1).get().then(snap => {
+                                    if (!snap.empty) return snap.docs[0].data();
+                                    return null;
+                                }).catch(() => null)
+                            );
                         }
                     }
 
-                    // Eksekusi seluruh pencarian field secara bersamaan (Parallel Execution)
-                    const snapshots = await Promise.all(queryPromises);
-                    for (const snapshot of snapshots) {
-                        if (!snapshot.empty) {
-                            return snapshot.docs[0].data();
-                        }
+                    const results = await Promise.all(queryPromises);
+                    for (const res of results) {
+                        if (res) return res;
                     }
 
                     return null;
@@ -635,50 +640,58 @@
                     } catch (e) {}
                 };
 
-                setLoading(true);
-
                 const cleanQuery = rawPlate.replace(/\s+/g, '').toLowerCase();
                 const offlineMatch = rawPlate.replace(/\s+/g, '').toUpperCase();
 
-                // 1. INTEGRASI PENCARIAN MULTI-FIELD FIREBASE
-                if (db) {
-                    try {
-                        const firebaseResult = await cariDataFirebaseMultiField(rawPlate);
-                        if (firebaseResult) {
-                            incrementDailyCount();
-                            setSearchResult(firebaseResult);
-                            setCurrentPage('result');
-                            setLoading(false);
-                            showMsg("DATA DITEMUKAN");
-                            return;
-                        }
-                    } catch (e) {
-                        console.warn("Firebase Search Error, switching to API/Offline:", e);
-                    }
-                }
-
-                // 2. CEK DATABASE OFFLINE SAMSAT
+                // 1. CEK INSTAN DATABASE OFFLINE SAMSAT (0ms)
                 if (OFFLINE_SAMSAT_DATABASE[offlineMatch]) {
                     incrementDailyCount();
                     setSearchResult(OFFLINE_SAMSAT_DATABASE[offlineMatch]);
                     setCurrentPage('result');
-                    setLoading(false);
+                    showMsg("DATA DITEMUKAN");
                     return;
                 }
 
-                // 3. CEK SESSION CACHE
+                // 2. CEK INSTAN SESSION CACHE (0ms)
                 try {
                     const cached = sessionStorage.getItem(cleanQuery);
                     if (cached) {
                         incrementDailyCount();
                         setSearchResult(JSON.parse(cached));
                         setCurrentPage('result');
-                        setLoading(false);
+                        showMsg("DATA DITEMUKAN");
                         return;
                     }
                 } catch (e) {}
 
-                // 4. PENCARIAN KE SERVER API UTAMA
+                setLoading(true);
+
+                // 3. PARALLEL RACE FETCHING (Firebase + Multi API Proxies secara serentak)
+                let resolved = false;
+                const controllers = [];
+
+                const finalizeSuccess = (data) => {
+                    if (resolved) return;
+                    resolved = true;
+                    controllers.forEach(ctrl => { try { ctrl.abort(); } catch(e) {} });
+                    try { sessionStorage.setItem(cleanQuery, JSON.stringify(data)); } catch (e) {}
+                    incrementDailyCount();
+                    setSearchResult(data);
+                    setCurrentPage('result');
+                    setLoading(false);
+                    showMsg("DATA DITEMUKAN");
+                };
+
+                // Firebase parallel task
+                if (db) {
+                    cariDataFirebaseMultiField(rawPlate).then((firebaseResult) => {
+                        if (firebaseResult && !resolved) {
+                            finalizeSuccess(firebaseResult);
+                        }
+                    }).catch(err => console.warn("Firebase race search bypass:", err));
+                }
+
+                // API Proxies parallel tasks
                 const baseUrls = [
                   `${customApi1 || API_UTAMA_1}${encodeURIComponent(cleanQuery)}`,
                   `${customApi2 || API_UTAMA_2}${encodeURIComponent(cleanQuery)}`,
@@ -695,53 +708,43 @@
                     requestPool.push({ url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(baseUrl)}` });
                 });
 
-                let resolved = false;
-                let activeRequests = requestPool.length;
-                const controllers = [];
-
-                const cleanLoadingAndTransition = (data) => {
-                    if (resolved) return;
-                    resolved = true;
-                    controllers.forEach(ctrl => { try { ctrl.abort(); } catch(e) {} });
-                    try { sessionStorage.setItem(cleanQuery, JSON.stringify(data)); } catch (e) {}
-                    incrementDailyCount();
-                    setSearchResult(data);
-                    setCurrentPage('result');
-                    setLoading(false);
-                };
-
-                const handleFailure = () => {
-                    activeRequests--;
-                    if (activeRequests === 0 && !resolved) {
-                        setLoading(false);
-                        showMsg("SERVER SIBUK / DATA TIDAK DITEMUKAN");
-                    }
-                };
+                let pendingCount = requestPool.length;
 
                 requestPool.forEach((targetObj) => {
                     const ctrl = new AbortController();
                     controllers.push(ctrl);
-                    const id = setTimeout(() => ctrl.abort(), 15000); 
+                    const timerId = setTimeout(() => ctrl.abort(), 12000); 
 
                     fetch(targetObj.url, { signal: ctrl.signal })
                         .then(async (res) => {
-                            clearTimeout(id);
-                            if (resolved || !res.ok) { handleFailure(); return; }
+                            clearTimeout(timerId);
+                            if (resolved || !res.ok) throw new Error("HTTP error");
                             const text = await res.text();
                             const vehicleData = unifyAndExtractVehicleData(text);
                             if (vehicleData && !resolved) {
                                 if (db) {
-                                    try {
-                                        await db.collection('pencarian').doc(cleanQuery.toUpperCase()).set({
-                                            ...vehicleData,
-                                            waktu_ditemukan: new Date()
-                                        }, { merge: true });
-                                    } catch (e) {}
+                                    db.collection('pencarian').doc(cleanQuery.toUpperCase()).set({
+                                        ...vehicleData,
+                                        waktu_ditemukan: new Date()
+                                    }, { merge: true }).catch(() => {});
                                 }
-                                cleanLoadingAndTransition(vehicleData);
-                            } else { handleFailure(); }
+                                finalizeSuccess(vehicleData);
+                            } else {
+                                throw new Error("No vehicle data");
+                            }
                         })
-                        .catch(() => { clearTimeout(id); handleFailure(); });
+                        .catch(() => {
+                            clearTimeout(timerId);
+                            pendingCount--;
+                            if (pendingCount === 0 && !resolved) {
+                                setTimeout(() => {
+                                    if (!resolved) {
+                                        setLoading(false);
+                                        showMsg("SERVER SIBUK / DATA TIDAK DITEMUKAN");
+                                    }
+                                }, 500);
+                            }
+                        });
                 });
             };
 
@@ -852,7 +855,7 @@
 
             return (
                 <div className="mobile-shell bg-black">
-                    {/* HALAMAN WELCOME */}
+                    {}
                     {currentPage === 'welcome' && (
                         <div className="flex-1 flex flex-col items-center justify-between py-12 px-8 h-full relative overflow-y-auto scrollbar-hide">
                             <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[40%] bg-purple-600/10 blur-[150px] rounded-full" />
@@ -877,7 +880,7 @@
                         </div>
                     )}
 
-                    {/* HALAMAN SEARCH */}
+                    {}
                     {currentPage === 'search' && (
                         <div className="flex-1 flex flex-col h-full bg-black">
                             <header className="px-6 py-5 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-md z-50">
@@ -961,7 +964,7 @@
                         </div>
                     )}
 
-                    {/* HALAMAN RESULT */}
+                    {}
                     {currentPage === 'result' && (
                         <div className="flex-1 flex flex-col h-full bg-black relative overflow-hidden">
                             <header className="px-6 py-6 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-md z-40">
@@ -991,7 +994,7 @@
                         </div>
                     )}
 
-                    {/* HALAMAN ADMIN */}
+                    {}
                     {currentPage === 'admin' && (
                         <div className="flex-1 flex flex-col h-full bg-[#050505] overflow-hidden">
                             <header className="px-6 py-6 flex items-center justify-between border-b border-white/5 bg-black z-[100]">
@@ -1472,6 +1475,7 @@
                         </div>
                     )}
 
+                    {}
                     {/* MODAL KAMERA OCR */}
                     {cameraActive && (
                         <div className="absolute inset-0 bg-black z-[2000] flex flex-col overflow-hidden">
