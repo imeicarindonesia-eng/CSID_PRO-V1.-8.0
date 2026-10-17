@@ -563,7 +563,7 @@
                 try {
                     const collectionRef = db.collection('pencarian');
 
-                    // 1. CEK DOKUMEN ID LANGSUNG (Sangat Cepat ~30-50ms)
+                    // 1. CEK DOKUMEN ID LANGSUNG (Sangat Cepat ~15-20ms)
                     const docSnap = await collectionRef.doc(queryClean).get().catch(() => null);
                     if (docSnap && docSnap.exists) {
                         return docSnap.data();
