@@ -562,55 +562,55 @@
 
                 try {
                     const collectionRef = db.collection('pencarian');
+
+                    // 1. CEK DOKUMEN ID LANGSUNG (Sangat Cepat ~30-50ms)
+                    const docSnap = await collectionRef.doc(queryClean).get().catch(() => null);
+                    if (docSnap && docSnap.exists) {
+                        return docSnap.data();
+                    }
+
+                    // 2. Jika ID Dokumen tidak ditemukan, cari di multi-field dengan Early Return
                     const targetFields = [
                         'nopol', 'Nopol', 'no_polisi', 'NopolServer',
                         'no_rangka', 'NoRangka', 'noka', 'vin', 'no_frame',
                         'no_mesin', 'NoMesin', 'nosin', 'no_engine',
                         'ktp', 'nik', 'NIK', 'NoKTP', 'no_ktp', 'identitas', 'no_identitas',
                         'nama', 'NamaPemilik', 'nama_pemilik', 'Nama', 'nm_pmlk', 
-                        'mssdn', 'MSSDN', 'no_hp', 'NoHP', 'nomor_hp', 'telepon', 
+                        'mssdn', 'MSSDN', 'no_hp', 'NoHP', 'nomor_hp', 'telepon'
                     ];
 
-                    const queryPromises = [];
+                    return await new Promise((resolve) => {
+                        let pending = targetFields.length;
+                        let found = false;
 
-                    // Fast Direct Doc ID Lookup
-                    queryPromises.push(
-                        collectionRef.doc(queryClean).get().then(docSnap => {
-                            if (docSnap.exists) return docSnap.data();
-                            return null;
-                        }).catch(() => null)
-                    );
+                        if (pending === 0) return resolve(null);
 
-                    // Parallel Field Query Execution
-                    for (const fieldName of targetFields) {
-                        queryPromises.push(
-                            collectionRef.where(fieldName, "==", queryClean).limit(1).get().then(snap => {
-                                if (!snap.empty) return snap.docs[0].data();
-                                return null;
-                            }).catch(() => null)
-                        );
-                        if (queryRaw !== queryClean) {
-                            queryPromises.push(
-                                collectionRef.where(fieldName, "==", queryRaw).limit(1).get().then(snap => {
-                                    if (!snap.empty) return snap.docs[0].data();
-                                    return null;
-                                }).catch(() => null)
-                            );
-                        }
-                    }
-
-                    const results = await Promise.all(queryPromises);
-                    for (const res of results) {
-                        if (res) return res;
-                    }
-
-                    return null;
+                        targetFields.forEach((fieldName) => {
+                            collectionRef.where(fieldName, "==", queryClean).limit(1).get()
+                                .then((snap) => {
+                                    if (found) return;
+                                    if (!snap.empty) {
+                                        found = true;
+                                        resolve(snap.docs[0].data()); // Langsung kembalikan begitu match pertama ketemu
+                                    } else {
+                                        pending--;
+                                        if (pending === 0 && !found) resolve(null);
+                                    }
+                                })
+                                .catch(() => {
+                                    if (found) return;
+                                    pending--;
+                                    if (pending === 0 && !found) resolve(null);
+                                });
+                        });
+                    });
                 } catch (error) {
                     console.warn("Pencarian Multi-Field Firebase Error:", error);
                     return null;
                 }
             };
 
+            // --- FUNGSI FETCH DATA (OPTIMAL: FIREBASE KILAT, LANGSUNG KE API JIKA KOSONG) ---
             const fetchData = async () => {
                 const rawPlate = plate.trim().toUpperCase();
                 if (!rawPlate) { showMsg("MASUKKAN NOPOL / NOKA / NOSIN / NIK"); return; }
@@ -652,7 +652,7 @@
                     return;
                 }
 
-                // 2. CEK INSTAN SESSION CACHE (0ms)
+                // 2. CEK INSTAN SESSION CACHE BROWSER (0ms)
                 try {
                     const cached = sessionStorage.getItem(cleanQuery);
                     if (cached) {
@@ -666,7 +666,25 @@
 
                 setLoading(true);
 
-                // 3. PARALLEL RACE FETCHING (Firebase + Multi API Proxies secara serentak)
+                // 3. STEP 1: CEK FIREBASE KILAT (Direct Doc ID + Early Return)
+                if (db) {
+                    try {
+                        const firebaseResult = await cariDataFirebaseMultiField(rawPlate);
+                        if (firebaseResult) {
+                            try { sessionStorage.setItem(cleanQuery, JSON.stringify(firebaseResult)); } catch (e) {}
+                            incrementDailyCount();
+                            setSearchResult(firebaseResult);
+                            setCurrentPage('result');
+                            setLoading(false);
+                            showMsg("IDENTITAS DITEMUKAN");
+                            return; // DATA ADA DI FIREBASE: STOP DI SINI (API 0% DITEMBAK)
+                        }
+                    } catch (err) {
+                        console.warn("Pengecekan Firebase gagal / timeout, beralih ke API:", err);
+                    }
+                }
+
+                // 4. STEP 2: LANGSUNG TEMBAK URL API JIKA FIREBASE KOSONG (NULL)
                 let resolved = false;
                 const controllers = [];
 
@@ -682,16 +700,6 @@
                     showMsg("DATA DITEMUKAN");
                 };
 
-                // Firebase parallel task
-                if (db) {
-                    cariDataFirebaseMultiField(rawPlate).then((firebaseResult) => {
-                        if (firebaseResult && !resolved) {
-                            finalizeSuccess(firebaseResult);
-                        }
-                    }).catch(err => console.warn("Firebase race search bypass:", err));
-                }
-
-                // API Proxies parallel tasks
                 const baseUrls = [
                   `${customApi1 || API_UTAMA_1}${encodeURIComponent(cleanQuery)}`,
                   `${customApi2 || API_UTAMA_2}${encodeURIComponent(cleanQuery)}`,
@@ -855,7 +863,6 @@
 
             return (
                 <div className="mobile-shell bg-black">
-                    {}
                     {currentPage === 'welcome' && (
                         <div className="flex-1 flex flex-col items-center justify-between py-12 px-8 h-full relative overflow-y-auto scrollbar-hide">
                             <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[40%] bg-purple-600/10 blur-[150px] rounded-full" />
@@ -880,7 +887,6 @@
                         </div>
                     )}
 
-                    {}
                     {currentPage === 'search' && (
                         <div className="flex-1 flex flex-col h-full bg-black">
                             <header className="px-6 py-5 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-md z-50">
@@ -964,7 +970,6 @@
                         </div>
                     )}
 
-                    {}
                     {currentPage === 'result' && (
                         <div className="flex-1 flex flex-col h-full bg-black relative overflow-hidden">
                             <header className="px-6 py-6 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-md z-40">
@@ -994,7 +999,6 @@
                         </div>
                     )}
 
-                    {}
                     {currentPage === 'admin' && (
                         <div className="flex-1 flex flex-col h-full bg-[#050505] overflow-hidden">
                             <header className="px-6 py-6 flex items-center justify-between border-b border-white/5 bg-black z-[100]">
@@ -1475,7 +1479,6 @@
                         </div>
                     )}
 
-                    {}
                     {/* MODAL KAMERA OCR */}
                     {cameraActive && (
                         <div className="absolute inset-0 bg-black z-[2000] flex flex-col overflow-hidden">
