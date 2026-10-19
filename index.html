@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -29,7 +29,7 @@
         body { background-color: var(--bg-dark); margin: 0; padding: 0; font-family: 'Inter', sans-serif; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; color: white; -webkit-tap-highlight-color: transparent; }
         @keyframes scrollText { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         .animate-marquee { display: inline-block; white-space: nowrap; animation: scrollText 22s linear infinite; }
-        .key-press-effect:active { background-color: #ffffff !important; color: #000000 !important; transform: scale(0.95); transition: all 0.1s ease; }
+        .key-press-effect { touch-action: none !important; -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important; transition: none !important; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .text-glow-purple { text-shadow: 0 0 20px rgba(168, 85, 247, 0.6); }
         .text-glow-cyan { text-shadow: 0 0 20px rgba(6, 182, 212, 0.6); }
@@ -60,7 +60,7 @@
         const API_UTAMA_1 = "https://priyamcookware.com/wp-admin/lopon/lopon22.php?key=nopolnumber&q=";
         const API_UTAMA_2 = "https://priyamcookware.com/wp-admin/loponunli/unli.php?key=nopolnumber&q=";
         const API_UTAMA_3 = "https://priyamcookware.com/wp-admin/lopon22/lopon23.php?key=lopon23&q=";
-            
+
         const OFFLINE_SAMSAT_DATABASE = {
             "B1011NOC": {
                 "nopol": "B1011NOC",
@@ -230,6 +230,24 @@
             };
 
             const showMsg = (txt) => { setNotification(txt); setTimeout(() => setNotification(null), 3500); };
+
+            const handleKey = (action) => (e) => {
+                if (e) {
+                    if (e.cancelable) e.preventDefault();
+                    e.stopPropagation();
+                }
+                const btn = e.currentTarget;
+                if (btn) {
+                    btn.classList.add('!bg-white', '!text-black', 'scale-95');
+                    setTimeout(() => {
+                        btn.classList.remove('!bg-white', '!text-black', 'scale-95');
+                    }, 70);
+                }
+                if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                    try { navigator.vibrate(12); } catch (err) {}
+                }
+                action();
+            };
 
             useEffect(() => {
                 const updateCountdown = () => {
@@ -558,18 +576,15 @@
                 if (!db || !searchQuery) return null;
 
                 const queryClean = searchQuery.replace(/\s+/g, '').toUpperCase();
-                const queryRaw = searchQuery.trim().toUpperCase();
 
                 try {
                     const collectionRef = db.collection('pencarian');
 
-                    // 1. CEK DOKUMEN ID LANGSUNG (Sangat Cepat ~10-15ms)
                     const docSnap = await collectionRef.doc(queryClean).get().catch(() => null);
                     if (docSnap && docSnap.exists) {
                         return docSnap.data();
                     }
 
-                    // 2. Jika ID Dokumen tidak ditemukan, cari di multi-field dengan Early Return
                     const targetFields = [
                         'nopol', 'Nopol', 'no_polisi', 'NopolServer',
                         'no_rangka', 'NoRangka', 'noka', 'vin', 'no_frame',
@@ -591,7 +606,7 @@
                                     if (found) return;
                                     if (!snap.empty) {
                                         found = true;
-                                        resolve(snap.docs[0].data()); // Langsung kembalikan begitu match pertama ketemu
+                                        resolve(snap.docs[0].data());
                                     } else {
                                         pending--;
                                         if (pending === 0 && !found) resolve(null);
@@ -610,7 +625,6 @@
                 }
             };
 
-            // --- FUNGSI FETCH DATA (OPTIMAL: FIREBASE KILAT, LANGSUNG KE API JIKA KOSONG) ---
             const fetchData = async () => {
                 const rawPlate = plate.trim().toUpperCase();
                 if (!rawPlate) { showMsg("MASUKKAN NOPOL / NOKA / NOSIN / NIK"); return; }
@@ -643,7 +657,6 @@
                 const cleanQuery = rawPlate.replace(/\s+/g, '').toLowerCase();
                 const offlineMatch = rawPlate.replace(/\s+/g, '').toUpperCase();
 
-                // 1. CEK INSTAN DATABASE OFFLINE SAMSAT (0ms)
                 if (OFFLINE_SAMSAT_DATABASE[offlineMatch]) {
                     incrementDailyCount();
                     setSearchResult(OFFLINE_SAMSAT_DATABASE[offlineMatch]);
@@ -652,7 +665,6 @@
                     return;
                 }
 
-                // 2. CEK INSTAN SESSION CACHE BROWSER (0ms)
                 try {
                     const cached = sessionStorage.getItem(cleanQuery);
                     if (cached) {
@@ -666,7 +678,6 @@
 
                 setLoading(true);
 
-                // 3. STEP 1: CEK FIREBASE KILAT (Direct Doc ID + Early Return)
                 if (db) {
                     try {
                         const firebaseResult = await cariDataFirebaseMultiField(rawPlate);
@@ -677,14 +688,13 @@
                             setCurrentPage('result');
                             setLoading(false);
                             showMsg("INFORMASI KENDARAAN DITEMUKAN");
-                            return; // DATA ADA DI FIREBASE: STOP DI SINI (API 0% DITEMBAK)
+                            return;
                         }
                     } catch (err) {
                         console.warn("Pengecekan Firebase gagal / timeout, beralih ke API:", err);
                     }
                 }
 
-                // 4. STEP 2: LANGSUNG TEMBAK URL API JIKA FIREBASE KOSONG (NULL)
                 let resolved = false;
                 const controllers = [];
 
@@ -844,11 +854,10 @@
                         </p>
                         <button type="button" onClick={() => window.location.reload()} className="w-full max-w-[240px] bg-[#181a2e] text-white border border-purple-500/30 py-4 rounded-2xl font-black text-xs uppercase shadow-lg active:scale-95 transition-transform">CEK ULANG KONEKSI</button>
 
-                        {/* Modal Akses Master Admin saat Mode Maintenance */}
                         {showPinModal && (
                             <div className="absolute inset-0 bg-black/95 backdrop-blur-3xl z-[2000] flex items-center justify-center p-8">
                                 <div className="glass-panel w-full max-w-[340px] rounded-[3.5rem] border-white/10 p-10 text-center shadow-2xl">
-                                    <h3 className="text-purple-300 font-black text-[12px] uppercase mb-8 tracking-[0.3em] opacity-90">ADMIN OTORISASI</h3>
+                                    <h3 className="text-purple-300 font-black text-[12px] uppercase mb-8 tracking-[0.3em] opacity-90">MASTER ADMIN</h3>
                                     <input autoFocus type="password" value={pinInput} onChange={e => setPinInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleMasterLogin()} placeholder="PIN" className="w-full bg-[#e9d5ff] border-none rounded-3xl p-5 text-center text-4xl font-black text-black outline-none mb-8 font-mono-custom tracking-tighter shadow-inner placeholder:text-purple-400" />
                                     <div className="flex gap-4">
                                         <button type="button" onClick={() => setShowPinModal(false)} className="flex-1 py-4 bg-[#131722] text-white rounded-2xl font-black text-[11px] uppercase tracking-widest outline-none">BATAL</button>
@@ -863,6 +872,7 @@
 
             return (
                 <div className="mobile-shell bg-black">
+                    {}
                     {currentPage === 'welcome' && (
                         <div className="flex-1 flex flex-col items-center justify-between py-12 px-8 h-full relative overflow-y-auto scrollbar-hide">
                             <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[40%] bg-purple-600/10 blur-[150px] rounded-full" />
@@ -871,7 +881,7 @@
                                 <p className="text-[20px] font-black uppercase tracking-tight leading-tight text-white">𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋.𝐏𝐑𝐎</p>
                             </div>
                             <div className="flex flex-col items-center z-10">
-                                <h1 onClick={() => { setAdminTapCount(c => c + 1); if(adminTapCount === 4) setShowPinModal(true); }} className="text-[26px] font-black text-white cursor-pointer tracking-tighter">E-PLAT BURGUNDY</h1>
+                                <h1 onClick={() => { setAdminTapCount(c => c + 1); if(adminTapCount === 4) setShowPinModal(true); }} className="text-[26px] font-black text-white cursor-pointer tracking-tighter">E-PLAT DIGITAL</h1>
                                 <div className="h-1 w-20 bg-purple-500 rounded-full -mt-2 animate-pulse" />
                             </div>
                             <div className="w-full flex flex-col items-center gap-6 mb-8 z-10">
@@ -881,39 +891,36 @@
                                 </div>
                                 <div className="w-full space-y-4 max-w-[340px]">
                                     <button type="button" onClick={handleLoginOnline} className="w-full bg-purple-600 text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.Shield cls="w-5 h-5 text-white" /> LOGIN APLIKASI </button>
-                                    <button type="button" onClick={() => window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Saya Mau Aktivasi Aplikasi 𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋, Bantu Aktifkan ID berikut ini : '+registrationId)}`)} className="w-full bg-[#108a6e] text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3">KLIK DAFTAR</button>
+                                    <button type="button" onClick={() => window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Saya Mau Aktivasi Aplikasi 𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎🇱, Bantu Aktifkan ID berikut ini : '+registrationId)}`)} className="w-full bg-[#25d366] text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3">KLIK DAFTAR</button>
                                 </div>
                             </div>
                         </div>
                     )}
 
+                    {}
                     {currentPage === 'search' && (
                         <div className="flex-1 flex flex-col h-full bg-black">
                             <header className="px-6 py-5 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-md z-50">
                                 <div className="flex items-center gap-3 text-white">
                                     <div className="bg-purple-600 p-1.5 rounded-lg shadow-[0_0_12px_rgba(168,85,247,0.4)]"><Icons.Database cls="w-5 h-5 text-white" /></div>
-                                    <span className="font-black text-2xl tracking-tighter text-purple-400">BURGUNDY</span>
+                                    <span className="font-black text-2xl tracking-tighter text-purple-400">DATA NOPOL</span>
                                 </div>
                                 {renderStatusOverlay()}
                             </header>
                             <div className="h-10 bg-black/50 overflow-hidden flex items-center border-y border-purple-500/20">
-                                <div className="animate-marquee px-4 text-[10px] font-black uppercase tracking-widest text-purple-400">{broadcast}</div>
+                                <div className="animate-marquee px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">{broadcast}</div>
                             </div>
                             <main className="flex-1 flex flex-col px-4 pb-6 relative overflow-hidden">
+                                {}
                                 <div className="w-full h-32 border-2 border-purple-500/80 rounded-[2.2rem] bg-[#0c0517] flex items-center justify-center px-6 mb-3 mt-3 shadow-[0_0_25px_rgba(168,85,247,0.35)] transition-all">
                                     <input 
                                         ref={inputRef} 
                                         type="text" 
+                                        readOnly
                                         inputMode="none" 
                                         value={plate} 
                                         onChange={(e) => setPlate(e.target.value.toUpperCase())} 
-                                        className={`bg-transparent w-full text-center font-black uppercase ${plate.length > 10 ? 'text-2xl' : 'text-5xl'} text-white tracking-tighter outline-none border-none`}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                e.preventDefault();
-                                                fetchData();
-                                            }
-                                        }}
+                                        className={`bg-transparent w-full text-center font-black uppercase ${plate.length > 10 ? 'text-2xl' : 'text-5xl'} text-white tracking-tighter outline-none border-none select-none`}
                                     />
                                 </div>
 
@@ -929,18 +936,19 @@
                                     </p>
                                 </div>
 
-                                <div className="mt-auto space-y-1">
+                                {}
+                                <div className="mt-auto space-y-1 touch-none select-none">
                                     <div className={`grid ${isAdminRole(userRole) ? 'grid-cols-7' : 'grid-cols-6'} gap-[2px]`}>
-                                        <button type="button" onClick={() => setKbHeight(h => Math.max(15, h-2))} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 font-black text-xl outline-none"><Icons.Minus /></button>
-                                        <button type="button" onClick={() => setKbHeight(h => Math.min(35, h+2))} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 font-black text-xl outline-none"><Icons.Plus /></button>
-                                        <button type="button" onClick={startCamera} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 outline-none"><Icons.Camera /></button>
-                                        <button type="button" onClick={async () => { try { const t = await navigator.clipboard.readText(); setPlate(t.toUpperCase().replace(/\s/g, '')); } catch(e){} }} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-slate-400 border border-white/5 outline-none"><Icons.Paste /></button>
-                                        {isAdminRole(userRole) && <button type="button" onClick={() => setCurrentPage('admin')} className="bg-purple-950/60 h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 outline-none"><Icons.Shield /></button>}
-                                        <button type="button" onClick={() => window.location.reload()} className="bg-red-950/60 h-14 rounded-none key-press-effect flex items-center justify-center text-red-500 border border-white/5 outline-none"><Icons.Power /></button>
+                                        <button type="button" onPointerDown={handleKey(() => setKbHeight(h => Math.max(15, h-2)))} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 font-black text-xl outline-none"><Icons.Minus /></button>
+                                        <button type="button" onPointerDown={handleKey(() => setKbHeight(h => Math.min(35, h+2)))} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 font-black text-xl outline-none"><Icons.Plus /></button>
+                                        <button type="button" onPointerDown={handleKey(startCamera)} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 outline-none"><Icons.Camera /></button>
+                                        <button type="button" onPointerDown={handleKey(async () => { try { const t = await navigator.clipboard.readText(); setPlate(t.toUpperCase().replace(/\s/g, '')); } catch(e){} })} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 outline-none"><Icons.Paste /></button>
+                                        {isAdminRole(userRole) && <button type="button" onPointerDown={handleKey(() => setCurrentPage('admin'))} className="bg-purple-950/60 h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 outline-none"><Icons.Shield /></button>}
+                                        <button type="button" onPointerDown={handleKey(() => window.location.reload())} className="bg-red-950/60 h-14 rounded-none key-press-effect flex items-center justify-center text-red-500 border border-white/5 outline-none"><Icons.Power /></button>
                                         
                                         <button 
                                             type="button"
-                                            onClick={handleSearchPress}
+                                            onPointerDown={handleKey(fetchData)}
                                             className="bg-purple-600 h-14 rounded-none key-press-effect flex items-center justify-center text-white font-black shadow-lg border border-white/5 cursor-pointer active:bg-purple-700 outline-none"
                                         >
                                             <Icons.Search />
@@ -949,19 +957,19 @@
                                     
                                     <div className="flex flex-col gap-[2px]">
                                         <div className="grid grid-cols-5 gap-[2px]">
-                                            {['1','2','3'].map(n => <button type="button" key={n} onClick={() => setPlate(p => p+n)} style={{height: `${kbHeight * 2.8}px`}} className="bg-black text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none">{n}</button>)}
-                                            <button type="button" onClick={() => setPlate(p => p.slice(0,-1))} style={{height: `${kbHeight * 2.8}px`}} className="bg-purple-600 text-white font-black text-sm key-press-effect border border-white/5 outline-none">DEL</button>
-                                            <button type="button" onClick={() => setPlate('')} style={{height: `${kbHeight * 2.8}px`}} className="bg-purple-600 text-white font-black text-sm key-press-effect border border-white/5 outline-none">CLR</button>
+                                            {['1','2','3'].map(n => <button type="button" key={n} onPointerDown={handleKey(() => setPlate(p => p+n))} style={{height: `${kbHeight * 2.8}px`}} className="bg-black text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none select-none">{n}</button>)}
+                                            <button type="button" onPointerDown={handleKey(() => setPlate(p => p.slice(0,-1)))} style={{height: `${kbHeight * 2.8}px`}} className="bg-purple-600 text-white font-black text-sm key-press-effect border border-white/5 outline-none select-none">DEL</button>
+                                            <button type="button" onPointerDown={handleKey(() => setPlate(''))} style={{height: `${kbHeight * 2.8}px`}} className="bg-purple-600 text-white font-black text-sm key-press-effect border border-white/5 outline-none select-none">CLR</button>
                                         </div>
                                         <div className="grid grid-cols-4 gap-[2px]">
-                                            {['4','5','6','0'].map(n => <button type="button" key={n} onClick={() => setPlate(p => p+n)} style={{height: `${kbHeight * 2.8}px`}} className="bg-black text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none">{n}</button>)}
+                                            {['4','5','6','0'].map(n => <button type="button" key={n} onPointerDown={handleKey(() => setPlate(p => p+n))} style={{height: `${kbHeight * 2.8}px`}} className="bg-black text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none select-none">{n}</button>)}
                                         </div>
                                         <div className="grid grid-cols-3 gap-[2px]">
-                                            {['7','8','9'].map(n => <button type="button" key={n} onClick={() => setPlate(p => p+n)} style={{height: `${kbHeight * 2.8}px`}} className="bg-black text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none">{n}</button>)}
+                                            {['7','8','9'].map(n => <button type="button" key={n} onPointerDown={handleKey(() => setPlate(p => p+n))} style={{height: `${kbHeight * 2.8}px`}} className="bg-black text-white rounded-none border border-white/5 text-4xl font-black key-press-effect font-mono-custom outline-none select-none">{n}</button>)}
                                         </div>
                                         <div className="flex flex-col gap-[2px] pt-1">
                                             {[ ['Q','W','E','R','T','Y','U','I','O','P'], ['A','S','D','F','G','H','J','K','L'], ['Z','X','C','V','B','N','M'] ].map((row, i) => (
-                                                <div key={i} className="flex gap-[2px] justify-center">{row.map(char => ( <button type="button" key={char} onClick={() => setPlate(p => p+char)} style={{height: `${kbHeight * 3.2}px`}} className="flex-1 bg-black text-white rounded-none border border-white/5 text-xl font-black key-press-effect outline-none">{char}</button> ))}</div>
+                                                <div key={i} className="flex gap-[2px] justify-center">{row.map(char => ( <button type="button" key={char} onPointerDown={handleKey(() => setPlate(p => p+char))} style={{height: `${kbHeight * 3.2}px`}} className="flex-1 bg-black text-white rounded-none border border-white/5 text-xl font-black key-press-effect outline-none select-none">{char}</button> ))}</div>
                                             ))}
                                         </div>
                                     </div>
@@ -970,6 +978,7 @@
                         </div>
                     )}
 
+                    {}
                     {currentPage === 'result' && (
                         <div className="flex-1 flex flex-col h-full bg-black relative overflow-hidden">
                             <header className="px-6 py-6 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-md z-40">
@@ -983,7 +992,7 @@
                                     <p className="text-[10px] font-black text-purple-400 tracking-wider uppercase">INFORMASI KENDARAAN :</p>
                                 </div>
                                 <div className="bg-black border border-white/5 rounded-[2.5rem] p-8 font-mono-custom text-[13px] text-white/90 leading-relaxed whitespace-pre-wrap break-words w-full shadow-2xl shimmer pointer-events-auto">
-                                    {`DIKIRIM VIA APLIKASI "𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋"\nINSTAL APLIKASI :\nhttps://wa.me/6285836328807\n_________________________________________\n\n👤 PEMILIK KENDARAAN :\n\n- NAMA : ${getVal('Nama')}\n- NIK : ${getVal('NIK')}\n- MSSDN : ${getVal('HP')}\n- PEKERJAAN : ${getVal('Pekerjaan')}\n\n📍 ALAMAT :\n\n- ${getVal('Alamat')}\n\n🚘 DATA KENDARAAN :\n\n- NO.PLAT : ${getVal('NopolServer')}\n- MEREK : ${getVal('Merk')}\n- TYPE : ${getVal('Tipe')}\n- TAHUN : ${getVal('Tahun')}\n- WARNA : ${getVal('Warna')}\n- CYLINDER : ${getVal('CC')}\n- NAMA BBM : ${getVal('BBM')}\n\n📄 DOKUMEN KENDARAAN :\n\n- NOKA : ${getVal('Noka')}\n- NOSIN : ${getVal('Nosin')}\n- NO. BPKB : ${getVal('BPKB')}\n- NO. STNK : ${getVal('STNK')}\n- TGL DAFTAR : ${getVal('Tgl')}\n- APM : ${getVal('APM')}\n\n❌ HASIL PENCARIAN DATA NOPOL INI TIDAK BOLEH DI SALAH GUNAKAN HANYA UNTUK INTERNAL DAN INVESTIGASI LAPANGAN.`}
+                                    {`DIKIRIM VIA APLIKASI "𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎🇱"\nINSTAL APLIKASI :\nhttps://wa.me/6285836328807\n_________________________________________\n\n👤 PEMILIK KENDARAAN :\n\n- NAMA : ${getVal('Nama')}\n- NIK : ${getVal('NIK')}\n- MSSDN : ${getVal('HP')}\n- PEKERJAAN : ${getVal('Pekerjaan')}\n\n📍 ALAMAT :\n\n- ${getVal('Alamat')}\n\n🚘 DATA KENDARAAN :\n\n- NO.PLAT : ${getVal('NopolServer')}\n- MEREK : ${getVal('Merk')}\n- TYPE : ${getVal('Tipe')}\n- TAHUN : ${getVal('Tahun')}\n- WARNA : ${getVal('Warna')}\n- CYLINDER : ${getVal('CC')}\n- NAMA BBM : ${getVal('BBM')}\n\n📄 DOKUMEN KENDARAAN :\n\n- NOKA : ${getVal('Noka')}\n- NOSIN : ${getVal('Nosin')}\n- NO. BPKB : ${getVal('BPKB')}\n- NO. STNK : ${getVal('STNK')}\n- TGL DAFTAR : ${getVal('Tgl')}\n- APM : ${getVal('APM')}\n\n❌ HASIL PENCARIAN DATA NOPOL INI TIDAK BOLEH DI SALAH GUNAKAN HANYA UNTUK INTERNAL DAN INVESTIGASI LAPANGAN.`}
                                 </div>
                                 <div className="mt-8 space-y-4 w-full">
                                     <button type="button" onClick={() => {
@@ -999,6 +1008,7 @@
                         </div>
                     )}
 
+                    {}
                     {currentPage === 'admin' && (
                         <div className="flex-1 flex flex-col h-full bg-[#050505] overflow-hidden">
                             <header className="px-6 py-6 flex items-center justify-between border-b border-white/5 bg-black z-[100]">
@@ -1010,7 +1020,6 @@
                             </header>
                             <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6 pb-20 scrollbar-hide">
                                 
-                                {/* FITUR KHUSUS MASTER ADMIN UTAMA */}
                                 {userRole === 'master' && (
                                     <>
                                         <div className="grid grid-cols-3 gap-2">
@@ -1028,7 +1037,7 @@
                                             </div>
                                         </div>
 
-                                        {/* LOG AKTIVASI ADMIN & PETUGAS */}
+                                        {}
                                         {(() => {
                                             const todayActivations = managedPins.filter(p => {
                                                 const ts = p.activated_at || p.created_at;
@@ -1142,7 +1151,6 @@
                                             );
                                         })()}
 
-                                        {/* SAKLAR MAINTENANCE GLOBAL */}
                                         <div className="glass-panel p-6 rounded-[2.5rem] border-white/5 space-y-4">
                                             <h3 className="text-purple-400 font-black text-xs uppercase tracking-wider">🚨 KONTROL SAKLAR MAINTENANCE (GLOBAL)</h3>
                                             
@@ -1167,7 +1175,6 @@
                                                 </button>
                                             </div>
 
-                                            {/* LIMIT HARIAN */}
                                             <div className="bg-black/40 p-4 rounded-2xl border border-white/5 space-y-3 mt-4">
                                                 <div className="flex justify-between items-center">
                                                     <p className="text-xs font-black text-white">LIMIT PENCARIAN HARIAN</p>
@@ -1211,7 +1218,6 @@
                                             </div>
                                         </div>
 
-                                        {/* KONTROL SERVER API */}
                                         <div className="glass-panel p-6 rounded-[2.5rem] border-white/5 space-y-3">
                                             <h3 className="text-purple-400 font-black text-xs uppercase tracking-wider">🔌 KONTROL SERVER API</h3>
                                             
@@ -1245,7 +1251,6 @@
                                             </button>
                                         </div>
 
-                                        {/* KONTROL AKUN ADMIN 1-10 */}
                                         <div className="glass-panel p-6 rounded-[2.5rem] border-white/5 space-y-4">
                                             <h3 className="text-purple-400 font-black text-xs uppercase tracking-wider">🔑 KONTROL AKUN ADMIN UTAMA 1 & ADMIN KEDUA 2 (ADMIN 1 - 10)</h3>
                                             
@@ -1308,7 +1313,6 @@
                                             </button>
                                         </div>
 
-                                        {/* RUNNING TEXT */}
                                         <div className="glass-panel p-6 rounded-[2.5rem] border-white/5">
                                             <textarea value={broadcast} onChange={e => setBroadcast(e.target.value)} className="w-full bg-black/50 border border-white/10 rounded-2xl p-5 text-xs text-white outline-none h-24 mb-4 font-mono-custom focus:border-purple-500/30 transition-all" />
                                             <button type="button" onClick={async () => { if (!db) return; await db.collection('artifacts').doc(APP_ID).collection('public').doc('data').collection(COLLECTION_SETTINGS).doc('main').set({ text: broadcast }, { merge: true }); showMsg("TEXT DIPERBARUI"); }} className="w-full bg-purple-600 text-white py-4 rounded-2xl font-black text-xs uppercase shadow-xl outline-none">UPDATE RUNNING TEXT</button>
@@ -1316,7 +1320,6 @@
                                     </>
                                 )}
 
-                                {/* PENCARIAN & MANAJEMEN PIN USER */}
                                 <div className="flex gap-3">
                                     <input 
                                         type="text" 
@@ -1430,7 +1433,7 @@
                                                         >
                                                             PERPANJANG MASA AKTIF
                                                         </button>
-                                                        
+
                                                         <button 
                                                             type="button" 
                                                             onClick={() => { 
@@ -1443,7 +1446,7 @@
                                                                     } 
                                                                 }); 
                                                             }} 
-                                                            className="flex-1 bg-slate-900 border border-white/5 text-white py-4 rounded-2xl text-[9px] font-black uppercase text-blue-400 outline-none"
+                                                            className="flex-1 bg-slate-900 border border-white/5 text-slate-400 py-4 rounded-2xl text-[9px] font-black uppercase outline-none"
                                                         >
                                                             RESET HW
                                                         </button>
@@ -1461,7 +1464,7 @@
                                                                 } 
                                                             }); 
                                                         }} 
-                                                        className="w-full mt-2 bg-red-600/10 text-red-500 py-3.5 rounded-2xl text-[9px] font-black uppercase flex items-center justify-center gap-2 border border-red-600/20 outline-none"
+                                                        className="w-full mt-2 bg-red-950/40 hover:bg-red-900/60 text-red-400 py-3.5 rounded-2xl text-[9px] font-black uppercase flex items-center justify-center gap-2 border border-red-800/30 outline-none"
                                                     >
                                                         HAPUS PERMANEN
                                                     </button>
@@ -1479,17 +1482,16 @@
                         </div>
                     )}
 
-                    {/* MODAL KAMERA OCR */}
+                    {}
                     {cameraActive && (
                         <div className="absolute inset-0 bg-black z-[2000] flex flex-col overflow-hidden">
                             <video ref={videoRef} autoPlay playsInline className="absolute inset-0 w-full h-full object-cover z-0" />
                             <canvas ref={canvasRef} className="hidden" />
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"><div className="w-80 h-40 scan-guide rounded-3xl" /><div className="absolute top-[18%] text-center text-[10px] font-black uppercase tracking-[0.2em] text-purple-400 bg-black/75 px-5 py-2.5 rounded-full border border-purple-500/20 shadow-lg">POSISIKAN PLAT NOMOR DI DALAM KOTAK</div></div>
-                            <div className="absolute bottom-8 left-6 right-6 z-20 flex items-center justify-between gap-4 bg-black/45 backdrop-blur-md p-5 rounded-[2rem] border border-white/10 shadow-2xl"><button type="button" onClick={stopCamera} className="p-5 bg-slate-900/80 rounded-2xl text-white outline-none"><Icons.X /></button><button type="button" onClick={captureAndProcess} disabled={isScanning} className="flex-1 bg-purple-600 text-white font-black py-5 rounded-2xl uppercase flex items-center justify-center gap-3 active:scale-95 transition-all shadow-xl shadow-purple-600/20 outline-none">{isScanning ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : <Icons.Camera cls="w-5 h-5 text-white" />}{isScanning ? 'MENDETEKSI...' : 'AMBIL FOTO PLAT'}</button></div>
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"><div className="w-80 h-40 scan-guide rounded-3xl" /><div className="absolute top-[18%] text-center text-[10px] font-black uppercase tracking-[0.2em] text-purple-300 bg-black/80 px-5 py-2.5 rounded-full border border-purple-500/40">POSISIKAN PLAT NOMOR DI DALAM KOTAK</div></div>
+                            <div className="absolute bottom-8 left-6 right-6 z-20 flex items-center justify-between gap-4 bg-black/60 backdrop-blur-md p-5 rounded-[2rem] border border-white/10 shadow-2xl"><button type="button" onClick={stopCamera} className="p-5 bg-zinc-900 rounded-2xl text-white outline-none border border-white/10"><Icons.X /></button><button type="button" onClick={captureAndProcess} disabled={isScanning} className="flex-1 bg-purple-600 text-white font-black py-5 rounded-2xl uppercase flex items-center justify-center gap-3 active:scale-95 transition-all shadow-xl outline-none">{isScanning ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : <Icons.Camera cls="w-5 h-5 text-white" />}{isScanning ? 'MENDETEKSI...' : 'AMBIL FOTO PLAT'}</button></div>
                         </div>
                     )}
 
-                    {/* MODAL INPUT PIN MASTER / ADMIN OTORISASI */}
                     {showPinModal && (
                         <div className="absolute inset-0 bg-black/95 backdrop-blur-3xl z-[2000] flex items-center justify-center p-8">
                             <div className="glass-panel w-full max-w-[340px] rounded-[3.5rem] border-white/10 p-10 text-center shadow-2xl">
@@ -1503,32 +1505,30 @@
                         </div>
                     )}
 
-                    {/* MODAL KONFIRMASI */}
                     {confirmModal && (
                         <div className="absolute inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-6">
                             <div className="glass-panel w-full max-w-[320px] rounded-[2.5rem] border-white/10 p-10 text-center shadow-2xl">
                                 <p className="text-white font-black text-xl mb-8 leading-tight tracking-tight">{confirmModal.message}</p>
                                 <div className="flex gap-4">
-                                    <button type="button" onClick={() => setConfirmModal(null)} className="flex-1 py-4 bg-slate-900 rounded-2xl font-black text-[11px] uppercase tracking-widest outline-none">BATAL</button>
-                                    <button type="button" onClick={confirmModal.onConfirm} className="flex-1 py-4 bg-red-600 rounded-2xl font-black text-[11px] uppercase tracking-widest text-white shadow-lg shadow-red-600/20 outline-none">YA, PROSES</button>
+                                    <button type="button" onClick={() => setConfirmModal(null)} className="flex-1 py-4 bg-zinc-800 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest outline-none">BATAL</button>
+                                    <button type="button" onClick={confirmModal.onConfirm} className="flex-1 py-4 bg-purple-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-lg outline-none">YA, PROSES</button>
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    {/* MODAL TAMBAH PIN BARU */}
                     {showAddPinModal && (
                         <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl z-[1000] flex items-center justify-center p-6">
                             <div className="glass-panel w-full max-w-[380px] rounded-[3rem] p-10 border-white/10 shadow-2xl flex flex-col">
-                                <p className="text-white font-black uppercase text-xs mb-6 text-center tracking-widest opacity-60">TAMBAH ID PIN USER BARU</p>
-                                <input type="number" value={newPinInput} onChange={e => setNewPinInput(e.target.value)} placeholder="000000" className="w-full bg-black border border-white/5 rounded-3xl p-6 text-white font-black text-4xl text-center mb-6 font-mono-custom tracking-widest" />
-                                <div className="grid grid-cols-3 gap-2 mb-8 max-h-[160px] overflow-y-auto pr-1 scrollbar-hide border border-white/5 p-2 rounded-2xl bg-black/30">
+                                <p className="text-purple-400 font-black uppercase text-xs mb-6 text-center tracking-widest opacity-80">TAMBAH ID PIN USER BARU</p>
+                                <input type="number" value={newPinInput} onChange={e => setNewPinInput(e.target.value)} placeholder="000000" className="w-full bg-black border border-purple-500/30 rounded-3xl p-6 text-white font-black text-4xl text-center mb-6 font-mono-custom tracking-widest" />
+                                <div className="grid grid-cols-3 gap-2 mb-8 max-h-[160px] overflow-y-auto pr-1 scrollbar-hide border border-white/5 p-2 rounded-2xl bg-black/40">
                                     {durationOptions.map(opt => (
-                                        <button type="button" key={opt.l} onClick={() => setNewPinDuration(opt.v)} className={`py-4 rounded-xl text-[9px] font-black uppercase transition-all ${newPinDuration === opt.v ? 'bg-purple-600 text-white font-black' : 'bg-slate-900 text-slate-500'}`}>{opt.l}</button>
+                                        <button type="button" key={opt.l} onClick={() => setNewPinDuration(opt.v)} className={`py-4 rounded-xl text-[9px] font-black uppercase transition-all ${newPinDuration === opt.v ? 'bg-purple-600 text-white font-black' : 'bg-slate-900 text-slate-400'}`}>{opt.l}</button>
                                     ))}
                                 </div>
                                 <div className="flex gap-3">
-                                    <button type="button" onClick={() => setShowAddPinModal(false)} className="flex-1 py-5 bg-slate-900 rounded-2xl font-black text-[11px] uppercase outline-none">BATAL</button>
+                                    <button type="button" onClick={() => setShowAddPinModal(false)} className="flex-1 py-5 bg-zinc-800 text-white rounded-2xl font-black text-[11px] uppercase outline-none">BATAL</button>
                                     <button type="button" onClick={async () => {
                                         if (!db || !newPinInput) return;
                                         await db.collection('artifacts').doc(APP_ID).collection('public').doc('data').collection(COLLECTION_PINS).doc(newPinInput).set({
@@ -1544,17 +1544,16 @@
                                         setShowAddPinModal(false);
                                         setNewPinInput('');
                                         showMsg("PIN BERHASIL DIBUAT");
-                                    }} className="flex-1 py-5 bg-purple-600 text-white rounded-2xl font-black text-[11px] uppercase shadow-lg shadow-purple-600/20 outline-none">SIMPAN PIN</button>
+                                    }} className="flex-1 py-5 bg-purple-600 text-white rounded-2xl font-black text-[11px] uppercase shadow-lg outline-none">SIMPAN PIN</button>
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    {/* MODAL PERPANJANG MASA AKTIF */}
                     {durationModal && (
                         <div className="absolute inset-0 bg-black/90 backdrop-blur-xl z-[500] flex items-center justify-center p-6">
                             <div className="glass-panel w-full max-w-[360px] rounded-[3rem] p-10 border-white/10 shadow-2xl flex flex-col">
-                                <p className="text-white font-black uppercase text-xs mb-8 text-center tracking-[0.2em]">PERPANJANG MASA AKTIF: {durationModal.id}</p>
+                                <p className="text-purple-400 font-black uppercase text-xs mb-8 text-center tracking-[0.2em]">PERPANJANG MASA AKTIF: {durationModal.id}</p>
                                 <div className="grid grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-2 scrollbar-hide">
                                     {durationOptions.map(opt => (
                                         <button 
@@ -1572,7 +1571,7 @@
                                                 setDurationModal(null); 
                                                 showMsg(`MASA AKTIF DITAMBAH OLEH ${currentAdminName.toUpperCase()}`); 
                                             }} 
-                                            className="bg-slate-900 border border-white/5 text-white py-4 rounded-2xl text-[10px] font-black uppercase hover:bg-purple-600 transition-colors outline-none"
+                                            className="bg-zinc-900 border border-white/5 text-white py-4 rounded-2xl text-[10px] font-black uppercase hover:bg-purple-600 hover:text-white transition-colors outline-none"
                                         >
                                             {opt.l}
                                         </button>
@@ -1583,23 +1582,28 @@
                         </div>
                     )}
 
-                    {/* TOAST NOTIFIKASI */}
                     {notification && (
                         <div className="fixed top-12 left-1/2 -translate-x-1/2 z-[9999] flex items-center justify-center p-4 pointer-events-none w-full">
-                            <div className="bg-white text-black px-8 py-4 rounded-[2rem] font-black text-xs shadow-[0_10px_40px_rgba(0,0,0,0.8)] animate-bounce uppercase border-2 border-slate-200 text-center max-w-[90vw] leading-relaxed tracking-wider pointer-events-auto">
+                            <div className="bg-gray-300 text-black px-8 py-4 rounded-[2rem] font-black text-xs shadow-[0_10px_40px_rgba(255,255,255,0.2)] animate-bounce uppercase border-2 border-gray-400 text-center max-w-[90vw] leading-relaxed tracking-wider pointer-events-auto">
                                 {notification}
                             </div>
                         </div>
                     )}
                     
-                    {/* INDIKATOR LOADING */}
                     {loading && (
                         <div className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[9000] flex items-center justify-center">
-                            <div className="flex flex-col items-center w-64">
-                                <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden relative mb-6 border border-purple-500/30 shadow-inner">
-                                    <div className="absolute h-full bg-purple-500 rounded-full animate-line-bar shadow-[0_0_12px_rgba(168,85,247,0.8)]" />
-                                </div>
-                                <p className="text-white font-black uppercase text-[10px] tracking-[0.5em] animate-pulse">BURGUNDY ON PROSES...</p>
+                            <div className="flex flex-col items-center">
+                                <svg className="animate-spin w-14 h-14 text-white mb-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="11" y="1.5" width="2" height="5" rx="1" fill="currentColor" opacity="1.0" />
+                                    <rect x="11" y="1.5" width="2" height="5" rx="1" fill="currentColor" opacity="0.875" transform="rotate(45 12 12)" />
+                                    <rect x="11" y="1.5" width="2" height="5" rx="1" fill="currentColor" opacity="0.75" transform="rotate(90 12 12)" />
+                                    <rect x="11" y="1.5" width="2" height="5" rx="1" fill="currentColor" opacity="0.625" transform="rotate(135 12 12)" />
+                                    <rect x="11" y="1.5" width="2" height="5" rx="1" fill="currentColor" opacity="0.5" transform="rotate(180 12 12)" />
+                                    <rect x="11" y="1.5" width="2" height="5" rx="1" fill="currentColor" opacity="0.375" transform="rotate(225 12 12)" />
+                                    <rect x="11" y="1.5" width="2" height="5" rx="1" fill="currentColor" opacity="0.25" transform="rotate(270 12 12)" />
+                                    <rect x="11" y="1.5" width="2" height="5" rx="1" fill="currentColor" opacity="0.125" transform="rotate(315 12 12)" />
+                                </svg>
+                                <p className="text-white font-black uppercase text-[10px] tracking-[0.5em] animate-pulse">LOADING</p>
                             </div>
                         </div>
                     )}
