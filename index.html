@@ -464,6 +464,34 @@
 
             const stopCamera = () => { if (videoRef.current && videoRef.current.srcObject) { videoRef.current.srcObject.getTracks().forEach(t => t.stop()); } setCameraActive(false); };
 
+            const handlePasteFromClipboard = async () => {
+                try {
+                    let text = "";
+                    if (navigator.clipboard && navigator.clipboard.readText) {
+                        try {
+                            text = await navigator.clipboard.readText();
+                        } catch (clipErr) {
+                            text = "";
+                        }
+                    }
+                    if (!text) {
+                        text = prompt("TEMPEL / PASTE TEKS PLAT NOMOR DI SINI:");
+                    }
+                    if (text && text.trim() !== "") {
+                        const cleaned = text.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                        setPlate(cleaned);
+                        showMsg("TEKS BERHASIL DITEMPEL");
+                    }
+                } catch (e) {
+                    const fallbackText = prompt("TEMPEL / PASTE TEKS PLAT NOMOR DI SINI:");
+                    if (fallbackText && fallbackText.trim() !== "") {
+                        const cleaned = fallbackText.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                        setPlate(cleaned);
+                        showMsg("TEKS BERHASIL DITEMPEL");
+                    }
+                }
+            };
+
             const captureAndProcess = async () => {
                 if (!videoRef.current || !canvasRef.current) return;
                 setIsScanning(true);
@@ -857,7 +885,7 @@
                         {showPinModal && (
                             <div className="absolute inset-0 bg-black/95 backdrop-blur-3xl z-[2000] flex items-center justify-center p-8">
                                 <div className="glass-panel w-full max-w-[340px] rounded-[3.5rem] border-white/10 p-10 text-center shadow-2xl">
-                                    <h3 className="text-purple-300 font-black text-[12px] uppercase mb-8 tracking-[0.3em] opacity-90">MASTER ADMIN</h3>
+                                    <h3 className="text-purple-300 font-black text-[12px] uppercase mb-8 tracking-[0.3em] opacity-90">ADMIN OTORISASI</h3>
                                     <input autoFocus type="password" value={pinInput} onChange={e => setPinInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleMasterLogin()} placeholder="PIN" className="w-full bg-[#e9d5ff] border-none rounded-3xl p-5 text-center text-4xl font-black text-black outline-none mb-8 font-mono-custom tracking-tighter shadow-inner placeholder:text-purple-400" />
                                     <div className="flex gap-4">
                                         <button type="button" onClick={() => setShowPinModal(false)} className="flex-1 py-4 bg-[#131722] text-white rounded-2xl font-black text-[11px] uppercase tracking-widest outline-none">BATAL</button>
@@ -881,7 +909,7 @@
                                 <p className="text-[20px] font-black uppercase tracking-tight leading-tight text-white">𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋.𝐏𝐑𝐎</p>
                             </div>
                             <div className="flex flex-col items-center z-10">
-                                <h1 onClick={() => { setAdminTapCount(c => c + 1); if(adminTapCount === 4) setShowPinModal(true); }} className="text-[26px] font-black text-white cursor-pointer tracking-tighter">E-PLAT DIGITAL</h1>
+                                <h1 onClick={() => { setAdminTapCount(c => c + 1); if(adminTapCount === 4) setShowPinModal(true); }} className="text-[26px] font-black text-white cursor-pointer tracking-tighter">𝐄-𝐏𝐋𝐀𝐓 𝐃𝐈𝐆𝐈𝐓𝐀𝐋</h1>
                                 <div className="h-1 w-20 bg-purple-500 rounded-full -mt-2 animate-pulse" />
                             </div>
                             <div className="w-full flex flex-col items-center gap-6 mb-8 z-10">
@@ -903,7 +931,7 @@
                             <header className="px-6 py-5 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-md z-50">
                                 <div className="flex items-center gap-3 text-white">
                                     <div className="bg-purple-600 p-1.5 rounded-lg shadow-[0_0_12px_rgba(168,85,247,0.4)]"><Icons.Database cls="w-5 h-5 text-white" /></div>
-                                    <span className="font-black text-2xl tracking-tighter text-purple-400">DATA NOPOL</span>
+                                    <span className="font-black text-2xl tracking-tighter text-purple-400">𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋</span>
                                 </div>
                                 {renderStatusOverlay()}
                             </header>
@@ -911,16 +939,18 @@
                                 <div className="animate-marquee px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">{broadcast}</div>
                             </div>
                             <main className="flex-1 flex flex-col px-4 pb-6 relative overflow-hidden">
-                                {}
-                                <div className="w-full h-32 border-2 border-purple-500/80 rounded-[2.2rem] bg-[#0c0517] flex items-center justify-center px-6 mb-3 mt-3 shadow-[0_0_25px_rgba(168,85,247,0.35)] transition-all">
+                                {/* Display Plate Number Box */}
+                                <div 
+                                    className="w-full h-32 border-2 border-purple-500/80 rounded-[2.2rem] bg-[#0c0517] flex items-center justify-center px-6 mb-3 mt-3 shadow-[0_0_25px_rgba(168,85,247,0.35)] transition-all"
+                                >
                                     <input 
                                         ref={inputRef} 
                                         type="text" 
-                                        readOnly
                                         inputMode="none" 
                                         value={plate} 
                                         onChange={(e) => setPlate(e.target.value.toUpperCase())} 
-                                        className={`bg-transparent w-full text-center font-black uppercase ${plate.length > 10 ? 'text-2xl' : 'text-5xl'} text-white tracking-tighter outline-none border-none select-none`}
+                                        placeholder=""
+                                        className={`bg-transparent w-full text-center font-black uppercase ${plate.length > 10 ? 'text-2xl' : 'text-5xl'} text-white tracking-tighter outline-none border-none placeholder:text-purple-500/40 placeholder:text-xl`}
                                     />
                                 </div>
 
@@ -936,20 +966,20 @@
                                     </p>
                                 </div>
 
-                                {}
+                                {/* Toolbar Tombol Fungsi */}
                                 <div className="mt-auto space-y-1 touch-none select-none">
                                     <div className={`grid ${isAdminRole(userRole) ? 'grid-cols-7' : 'grid-cols-6'} gap-[2px]`}>
-                                        <button type="button" onPointerDown={handleKey(() => setKbHeight(h => Math.max(15, h-2)))} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 font-black text-xl outline-none"><Icons.Minus /></button>
-                                        <button type="button" onPointerDown={handleKey(() => setKbHeight(h => Math.min(35, h+2)))} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 font-black text-xl outline-none"><Icons.Plus /></button>
-                                        <button type="button" onPointerDown={handleKey(startCamera)} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 outline-none"><Icons.Camera /></button>
-                                        <button type="button" onPointerDown={handleKey(async () => { try { const t = await navigator.clipboard.readText(); setPlate(t.toUpperCase().replace(/\s/g, '')); } catch(e){} })} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 outline-none"><Icons.Paste /></button>
-                                        {isAdminRole(userRole) && <button type="button" onPointerDown={handleKey(() => setCurrentPage('admin'))} className="bg-purple-950/60 h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/5 outline-none"><Icons.Shield /></button>}
-                                        <button type="button" onPointerDown={handleKey(() => window.location.reload())} className="bg-red-950/60 h-14 rounded-none key-press-effect flex items-center justify-center text-red-500 border border-white/5 outline-none"><Icons.Power /></button>
+                                        <button type="button" onPointerDown={handleKey(() => setKbHeight(h => Math.max(15, h-2)))} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/10 font-black text-xl outline-none"><Icons.Minus /></button>
+                                        <button type="button" onPointerDown={handleKey(() => setKbHeight(h => Math.min(35, h+2)))} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/10 font-black text-xl outline-none"><Icons.Plus /></button>
+                                        <button type="button" onPointerDown={handleKey(startCamera)} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/10 outline-none"><Icons.Camera /></button>
+                                        <button type="button" onPointerDown={handleKey(handlePasteFromClipboard)} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/10 outline-none"><Icons.Paste /></button>
+                                        {isAdminRole(userRole) && <button type="button" onPointerDown={handleKey(() => setCurrentPage('admin'))} className="bg-[#1d082c] h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-purple-900/60 outline-none"><Icons.Shield /></button>}
+                                        <button type="button" onPointerDown={handleKey(() => window.location.reload())} className="bg-black h-14 rounded-none key-press-effect flex items-center justify-center text-purple-400 border border-white/10 outline-none"><Icons.Power /></button>
                                         
                                         <button 
                                             type="button"
                                             onPointerDown={handleKey(fetchData)}
-                                            className="bg-purple-600 h-14 rounded-none key-press-effect flex items-center justify-center text-white font-black shadow-lg border border-white/5 cursor-pointer active:bg-purple-700 outline-none"
+                                            className="bg-purple-600 h-14 rounded-none key-press-effect flex items-center justify-center text-white font-black shadow-lg border border-white/10 cursor-pointer active:bg-purple-700 outline-none"
                                         >
                                             <Icons.Search />
                                         </button>
