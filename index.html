@@ -689,7 +689,7 @@
                     incrementDailyCount();
                     setSearchResult(OFFLINE_SAMSAT_DATABASE[offlineMatch]);
                     setCurrentPage('result');
-                    showMsg("DATA DITEMUKAN");
+                    showMsg("");
                     return;
                 }
 
@@ -715,7 +715,7 @@
                             setSearchResult(firebaseResult);
                             setCurrentPage('result');
                             setLoading(false);
-                            showMsg("INFORMASI KENDARAAN DITEMUKAN");
+                            showMsg("");
                             return;
                         }
                     } catch (err) {
@@ -735,7 +735,7 @@
                     setSearchResult(data);
                     setCurrentPage('result');
                     setLoading(false);
-                    showMsg("DATA DITEMUKAN");
+                    showMsg("");
                 };
 
                 const baseUrls = [
@@ -878,7 +878,7 @@
                         </div>
                         <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-2">PEMELIHARAAN SISTEM</h2>
                         <p className="text-xs text-slate-400 font-bold max-w-[280px] leading-relaxed mb-8">
-                            Aplikasi DATA NOPOL sedang dalam pemeliharaan berkala. Akses akan terbuka kembali secara otomatis, setelah pemeliharaan selesai.
+                            Aplikasi "DATA NOPOL" sedang dalam pemeliharaan berkala. Akses akan terbuka kembali secara otomatis, setelah pemeliharaan selesai.
                         </p>
                         <button type="button" onClick={() => window.location.reload()} className="w-full max-w-[240px] bg-[#181a2e] text-white border border-purple-500/30 py-4 rounded-2xl font-black text-xs uppercase shadow-lg active:scale-95 transition-transform">CEK ULANG KONEKSI</button>
 
@@ -956,10 +956,10 @@
 
                                 <div className="w-full text-center py-2.5 px-4 mb-2 border border-purple-900/40 rounded-2xl bg-purple-950/30">
                                     <p className="text-purple-300 font-black text-xs tracking-widest flex items-center justify-center gap-1.5">
-                                        🚫 JANGAN LAKUKAN INI
+                                        🚫 DILARANG BUKA TUTUP APLIKASI
                                     </p>
                                     <p className="text-[9px] font-black text-purple-200/70 tracking-wider mt-0.5">
-                                        DILARANG MELAKUKAN SPAM CHEK TERUS-MENERUS
+                                        MOHON DI BUAT STANDBY DI LAYAR DAN JANGAN BUKA TUTUP
                                     </p>
                                     <p className="text-[8px] font-bold text-slate-500 tracking-wider">
                                         BISA MENGAKIBATKAN SERVER SIBUK / DATA TIDAK DI TEMUKAN
