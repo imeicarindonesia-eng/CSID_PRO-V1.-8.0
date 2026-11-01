@@ -922,7 +922,7 @@
                                     <p className="text-[60px] font-black text-white font-mono-custom tracking-tighter">{registrationId}</p>
                                 </div>
                                 <div className="w-full space-y-4 max-w-[340px]">
-                                    <button type="button" onClick={handleLoginOnline} className="w-full bg-purple-600 text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.Shield cls="w-5 h-5 text-white" /> 𝐋𝐎𝐆𝐈𝐍 𝐀𝐏𝐏𝐒</button>
+                                    <button type="button" onClick={handleLoginOnline} className="w-full bg-purple-600 text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.Shield cls="w-5 h-5 text-white" />𝐋𝐎𝐆𝐈𝐍 𝐀𝐏𝐏𝐒</button>
                                     <button type="button" onClick={() => window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Saya Mau Aktivasi Aplikasi 𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋, Bantu Aktifkan ID berikut ini : '+registrationId)}`)} className="w-full bg-[#25d366] text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.WhatsApp cls="w-6 h-6 text-white" />𝐊𝐋𝐈𝐊 𝐃𝐀𝐅𝐓𝐀𝐑</button>
                                 </div>
                             </div>
@@ -962,7 +962,7 @@
                                         🚫 DILARANG BUKA TUTUP APLIKASI
                                     </p>
                                     <p className="text-[9px] font-black text-purple-200/70 tracking-wider mt-0.5">
-                                        MOHON DI BUAT STANDBY DI LAYAR DAN JANGAN BUKA TUTUP
+                                        MOHON APLIKASI DI BUAT STANDBY DI LAYAR DAN JANGAN BUKA TUTUP
                                     </p>
                                     <p className="text-[8px] font-bold text-slate-500 tracking-wider">
                                         BISA MENGAKIBATKAN SERVER SIBUK / DATA TIDAK DI TEMUKAN
@@ -1619,9 +1619,9 @@
                         </div>
                     )}
                     
-                    {/* Komponen Icon Loading Baru Sesuai Gambar - Diposisikan di Paling Bawah Layar */}
+                    {/* Komponen Icon Loading Baru Sesuai Gambar - Diposisikan di Atas Layar */}
                     {loading && (
-                        <div className="absolute inset-0 bg-black/95 backdrop-blur-2xl z-[9000] flex flex-col justify-end items-center p-6 pb-12">
+                        <div className="absolute inset-0 bg-black/95 backdrop-blur-2xl z-[9000] flex flex-col justify-start items-center p-6 pt-12">
                             <div className="w-full max-w-[360px] flex flex-col gap-2.5">
                                 <div className="flex items-center justify-between font-mono-custom text-xs font-extrabold tracking-wider">
                                     <div className="flex items-center gap-2.5 text-white drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]">
