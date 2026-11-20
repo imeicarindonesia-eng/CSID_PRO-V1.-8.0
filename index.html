@@ -46,7 +46,7 @@
         
         /* Animasi Loading Bar Kustom (Kecepatan 0.3s / 0.3ms) */
         @keyframes processBarSlide { 0% { left: -50%; width: 50%; } 100% { left: 100%; width: 50%; } }
-        .animate-process-bar { position: absolute; top: 0; bottom: 0; animation: processBarSlide 0.2s linear infinite; }
+        .animate-process-bar { position: absolute; top: 0; bottom: 0; animation: processBarSlide 0.3s linear infinite; }
     </style>
 </head>
 <body>
@@ -55,7 +55,7 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        const MASTER_PIN = "Monselisland"; 
+        const MASTER_PIN = "Baharudin"; 
         const ADMIN_WA = "6285836328807";
         const APP_ID = 'csid-intelligence-pro';
         const COLLECTION_PINS = 'csid_pro_pins';
@@ -909,11 +909,11 @@
                         <div className="flex-1 flex flex-col items-center justify-between py-12 px-8 h-full relative overflow-y-auto scrollbar-hide">
                             <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[40%] bg-purple-600/10 blur-[150px] rounded-full" />
                             <div className="text-center z-10 mt-6 space-y-1.5">
-                                <p className="text-[20px] font-black uppercase tracking-tight text-purple-400 leading-tight">𝐒𝐄𝐋𝐀𝐌𝐀𝐓 𝐃𝐀𝐓𝐀𝐍𝐆 𝐃𝐈 𝐀𝐏𝐋𝐈𝐊𝐀𝐒𝐈</p>
-                                <p className="text-[20px] font-black uppercase tracking-tight leading-tight text-white">𝐃𝐈𝐆𝐈𝐓𝐀𝐋 𝐏𝐋𝐀𝐓 𝐈𝐍𝐅𝐎𝐑𝐌𝐀𝐓𝐈𝐎𝐍</p>
+                                <p className="text-[15px] font-black uppercase tracking-tight text-purple-400 leading-tight">SELAMAT DATANG DI APLIKASI</p>
+                                <p className="text-[20px] font-black uppercase tracking-tight leading-tight text-white">𝐄-𝐏𝐋𝐀𝐓 𝐃𝐈𝐆𝐈𝐓𝐀𝐋</p>
                             </div>
                             <div className="flex flex-col items-center z-10">
-                                <h1 onClick={() => { setAdminTapCount(c => c + 1); if(adminTapCount === 4) setShowPinModal(true); }} className="text-[26px] font-black text-white cursor-pointer tracking-tighter">𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋</h1>
+                                <h1 onClick={() => { setAdminTapCount(c => c + 1); if(adminTapCount === 4) setShowPinModal(true); }} className="text-[26px] font-black text-white cursor-pointer tracking-tighter">𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋 𝐏𝐑𝐎</h1>
                                 <div className="h-1 w-20 bg-purple-500 rounded-full -mt-2 animate-pulse" />
                             </div>
                             <div className="w-full flex flex-col items-center gap-6 mb-8 z-10">
@@ -922,8 +922,8 @@
                                     <p className="text-[60px] font-black text-white font-mono-custom tracking-tighter">{registrationId}</p>
                                 </div>
                                 <div className="w-full space-y-4 max-w-[340px]">
-                                    <button type="button" onClick={handleLoginOnline} className="w-full bg-purple-600 text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.Shield cls="w-5 h-5 text-white" />𝐋𝐎𝐆𝐈𝐍 𝐀𝐏𝐏𝐒</button>
-                                    <button type="button" onClick={() => window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Saya Mau Aktivasi Aplikasi 𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋, Bantu Aktifkan ID berikut ini : '+registrationId)}`)} className="w-full bg-[#25d366] text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.WhatsApp cls="w-6 h-6 text-white" />𝐊𝐋𝐈𝐊 𝐃𝐀𝐅𝐓𝐀𝐑</button>
+                                    <button type="button" onClick={handleLoginOnline} className="w-full bg-purple-600 text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.Shield cls="w-5 h-5 text-white" /> LOGIN APLIKASI </button>
+                                    <button type="button" onClick={() => window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent('Saya Mau Aktivasi Aplikasi 𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋, Bantu Aktifkan ID berikut ini : '+registrationId)}`)} className="w-full bg-[#25d366] text-white py-5 rounded-2xl font-black text-lg uppercase shadow-lg active:scale-95 flex items-center justify-center gap-3"><Icons.WhatsApp cls="w-6 h-6 text-white" /> KLIK DAFTAR</button>
                                 </div>
                             </div>
                         </div>
@@ -934,7 +934,7 @@
                             <header className="px-6 py-5 flex items-center justify-between border-b border-white/5 bg-black/80 backdrop-blur-md z-50">
                                 <div className="flex items-center gap-3 text-white">
                                     <div className="bg-purple-600 p-1.5 rounded-lg shadow-[0_0_12px_rgba(168,85,247,0.4)]"><Icons.Database cls="w-5 h-5 text-white" /></div>
-                                    <span className="font-black text-2xl tracking-tighter text-white-400">𝐃𝐀𝐓𝐀 𝐍𝐎𝐏𝐎𝐋</span>
+                                    <span className="font-black text-2xl tracking-tighter text-purple-400">DATA NOPOL</span>
                                 </div>
                                 {renderStatusOverlay()}
                             </header>
@@ -962,7 +962,7 @@
                                         🚫 DILARANG BUKA TUTUP APLIKASI
                                     </p>
                                     <p className="text-[9px] font-black text-purple-200/70 tracking-wider mt-0.5">
-                                        MOHON APLIKASI STANDBY DI LAYAR DAN JANGAN BUKA TUTUP
+                                        MOHON DI BUAT STANDBY DI LAYAR DAN JANGAN BUKA TUTUP
                                     </p>
                                     <p className="text-[8px] font-bold text-slate-500 tracking-wider">
                                         BISA MENGAKIBATKAN SERVER SIBUK / DATA TIDAK DI TEMUKAN
@@ -1628,7 +1628,7 @@
                                         <span className="w-3 h-3 rounded-full bg-slate-200 border border-white shadow-[0_0_12px_#ffffff,0_0_20px_rgba(168,85,247,0.9)] shrink-0 inline-block"></span>
                                         <span className="tracking-widest text-white font-black text-xs drop-shadow-[0_0_8px_rgba(168,85,247,0.9)]">PROCESSING DATA</span>
                                     </div>
-                                    <span className="text-purple-400/90 text-[11px] font-black tracking-widest drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]">PLEASE WAIT</span>
+                                    <span className="text-purple-200/90 text-[11px] font-black tracking-widest drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]">PLEASE WAIT</span>
                                 </div>
                                 <div className="relative w-full h-[2.5px] bg-purple-950/80 rounded-full overflow-hidden shadow-[0_0_12px_rgba(168,85,247,0.5)]">
                                     <div className="animate-process-bar bg-gradient-to-r from-transparent via-purple-300 to-white shadow-[0_0_14px_#a855f7]" />
